@@ -2,8 +2,10 @@ package output
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"strings"
+	"sync"
 	"text/tabwriter"
 	"time"
 
@@ -11,9 +13,12 @@ import (
 )
 
 type HumanOutput struct {
+	mu      sync.Mutex
 	noColor bool
 	quiet   bool
 	writer  *tabwriter.Writer
+	out     io.Writer
+	errOut  io.Writer
 	start   time.Time
 }
 
@@ -24,26 +29,35 @@ func NewHumanOutput(noColor, quiet bool) *HumanOutput {
 		noColor = true
 	}
 
-	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+	return newHumanOutputWithWriters(os.Stdout, os.Stderr, noColor, quiet)
+}
+
+func newHumanOutputWithWriters(out, errOut io.Writer, noColor, quiet bool) *HumanOutput {
+	w := tabwriter.NewWriter(out, 0, 0, 2, ' ', 0)
 	return &HumanOutput{
 		noColor: noColor,
 		quiet:   quiet,
 		writer:  w,
+		out:     out,
+		errOut:  errOut,
 	}
 }
 
 func (h *HumanOutput) HandleEvent(event engine.ScanEvent, total int) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
 	switch event.Type {
 	case engine.EventLifecycleStart:
 		h.start = time.Now()
 		if !h.quiet {
-			fmt.Fprintf(os.Stderr, "Scanning %d hosts...\n\n", total)
+			fmt.Fprintf(h.errOut, "Scanning %d hosts...\n\n", total)
 			fmt.Fprintln(h.writer, "  IP\tHOSTNAME\tMAC\tSTATUS\tPORTS")
 			h.writer.Flush()
 		}
 	case engine.EventProgress:
 		if !h.quiet {
-			fmt.Fprintf(os.Stderr, "\rProgress: %.1f%%", event.Progress*100)
+			fmt.Fprintf(h.errOut, "\rProgress: %.1f%%", event.Progress*100)
 		}
 	case engine.EventResult:
 		if event.Device == nil {
@@ -86,7 +100,7 @@ func (h *HumanOutput) HandleEvent(event engine.ScanEvent, total int) {
 		}
 
 		if !h.quiet {
-			fmt.Fprint(os.Stderr, "\r                                        \r")
+			fmt.Fprint(h.errOut, "\r                                        \r")
 		}
 
 		fmt.Fprintf(h.writer, "  %s\t%s\t%s\t%s%s%s\t%s\n", 
@@ -95,11 +109,11 @@ func (h *HumanOutput) HandleEvent(event engine.ScanEvent, total int) {
 
 	case engine.EventLifecycleComplete:
 		if !h.quiet {
-			fmt.Fprintf(os.Stderr, "\n\nScan complete in %s\n", time.Since(h.start).Round(10*time.Millisecond))
+			fmt.Fprintf(h.errOut, "\n\nScan complete in %s\n", time.Since(h.start).Round(10*time.Millisecond))
 		}
 	case engine.EventLifecycleCancel:
-		fmt.Fprintf(os.Stderr, "\n[CANCELLED] %s\n", event.Message)
+		fmt.Fprintf(h.errOut, "\n[CANCELLED] %s\n", event.Message)
 	case engine.EventWarning:
-		fmt.Fprintf(os.Stderr, "\n[WARN] %s\n", event.Message)
+		fmt.Fprintf(h.errOut, "\n[WARN] %s\n", event.Message)
 	}
 }
