@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"sync"
 	"text/tabwriter"
 	"time"
 
@@ -12,6 +13,7 @@ import (
 )
 
 type HumanOutput struct {
+	mu      sync.Mutex
 	noColor bool
 	quiet   bool
 	writer  *tabwriter.Writer
@@ -42,6 +44,9 @@ func newHumanOutputWithWriters(out, errOut io.Writer, noColor, quiet bool) *Huma
 }
 
 func (h *HumanOutput) HandleEvent(event engine.ScanEvent, total int) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
 	switch event.Type {
 	case engine.EventLifecycleStart:
 		h.start = time.Now()

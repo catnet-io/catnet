@@ -62,7 +62,9 @@ func TestScanCancelledByContext(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Signal testing is unreliable on Windows")
 	}
-	cmd := exec.Command(binaryPath, "scan", "10.0.0.1-255", "--ping-timeout", "1000")
+	cmd := exec.Command(binaryPath, "scan", "10.0.0.1-10.0.255.255", "--ping-timeout", "1000")
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
 	
 	if err := cmd.Start(); err != nil {
 		t.Fatalf("Failed to start: %v", err)
@@ -82,10 +84,10 @@ func TestScanCancelledByContext(t *testing.T) {
 	
 	if exitErr, ok := err.(*exec.ExitError); ok {
 		if exitErr.ExitCode() != cli.ExitCodeInterrupted {
-			t.Errorf("Expected ExitCodeInterrupted (%d), got %v", cli.ExitCodeInterrupted, exitErr.ExitCode())
+			t.Errorf("Expected ExitCodeInterrupted (%d), got %v\nStderr: %s", cli.ExitCodeInterrupted, exitErr.ExitCode(), stderr.String())
 		}
 	} else {
-		t.Errorf("Expected ExitError, got %v", err)
+		t.Errorf("Expected ExitError, got %v\nStderr: %s", err, stderr.String())
 	}
 }
 
