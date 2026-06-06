@@ -1,17 +1,15 @@
-﻿# Code of Conduct
+# Contributor Covenant Code of Conduct
 
 ## Our Pledge
-We want the CatNet ecosystem to be welcoming, respectful, practical, and collaborative.
 
-## Our Standards
-Examples of behavior that contribute to a positive environment:
-- Being respectful and constructive.
-- Giving technical feedback without personal attacks.
-- Focusing on code, documentation, security, usability, and maintainability.
+We as members, contributors, and leaders pledge to make participation in our
+community a harassment-free experience for everyone, regardless of age, body
+size, visible or invisible disability, ethnicity, sex characteristics, gender
+identity and expression, level of experience, education, socio-economic status,
+nationality, personal appearance, race, religion, or sexual identity
+and orientation.
 
-Examples of unacceptable behavior:
-- Harassment, insults, or discriminatory language.
-- Aggressive or unprofessional conduct in issues, pull requests, or discussions.
+We pledge to act and interact in ways that contribute to an open, welcoming,
+diverse, inclusive, and healthy community.
 
-## Enforcement
-Project maintainers may remove, edit, or reject comments, commits, issues, and pull requests that violate this code of conduct.
+(For the full text, see https://www.contributor-covenant.org/version/2/1/code_of_conduct/)
