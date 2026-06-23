@@ -44,7 +44,7 @@ func testMain(m *testing.M) int {
 	return m.Run()
 }
 
-func startTestServer(t *testing.T) (string, int) {
+func startTestServer(t *testing.T) int {
 	t.Helper()
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
@@ -61,14 +61,14 @@ func startTestServer(t *testing.T) (string, int) {
 		}
 	}()
 	t.Cleanup(func() { ln.Close() })
-	return ln.Addr().String(), port
+	return port
 }
 
 func TestScanOutputJSON(t *testing.T) {
-	_, port := startTestServer(t)
-	target := fmt.Sprintf("127.0.0.1:%d", port)
+	port := startTestServer(t)
+	portStr := fmt.Sprintf("%d", port)
 
-	cmd := exec.Command(binaryPath, "scan", target, "--format", "json", "--quiet", "--ports", fmt.Sprintf("%d", port))
+	cmd := exec.Command(binaryPath, "scan", "127.0.0.1", "--format", "json", "--quiet", "--ports", portStr)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
