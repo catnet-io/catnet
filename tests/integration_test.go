@@ -123,11 +123,14 @@ func TestExportXMLFromJSON(t *testing.T) {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
 	}
 
-	if !bytes.Contains(out, []byte("<schemaVersion>")) {
-		t.Errorf("XML output missing schemaVersion element, got: %s", out)
+	if !bytes.Contains(out, []byte("<results>")) {
+		t.Errorf("XML output missing root element, got: %s", out)
 	}
 	if !bytes.Contains(out, []byte("<ip>127.0.0.1</ip>")) {
 		t.Errorf("XML output missing device IP, got: %s", out)
+	}
+	if !bytes.Contains(out, []byte("<status>Alive</status>")) {
+		t.Errorf("XML output missing status element, got: %s", out)
 	}
 }
 
