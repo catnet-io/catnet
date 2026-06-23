@@ -66,16 +66,19 @@ var scanCmd = &cobra.Command{
 
 		var eventHandler engine.EventCallback
 		
-		if format == "json" {
+		switch format {
+		case "json":
 			handler := output.NewJSONOutput(scanQuiet)
 			eventHandler = func(e engine.ScanEvent) {
 				handler.HandleEvent(e, len(allIPs))
 			}
-		} else {
+		case "human":
 			handler := output.NewHumanOutput(noColor, scanQuiet)
 			eventHandler = func(e engine.ScanEvent) {
 				handler.HandleEvent(e, len(allIPs))
 			}
+		default:
+			return NewExitError(ExitCodeInputError, "Unsupported format '%s'. Use 'json' or 'human'.", format)
 		}
 
 		report, err := engine.StartScan(ctx, allIPs, cfg, eventHandler)
@@ -87,18 +90,18 @@ var scanCmd = &cobra.Command{
 			return NewExitError(ExitCodeRuntimeError, "Scan failed: %v", err)
 		}
 
-		if format == "json" || scanOutput != "" {
+		if format == "json" {
 			jsonBytes, err := exporter.ExportJSON(report)
 			if err != nil {
 				return NewExitError(ExitCodeRuntimeError, "Failed to encode JSON: %v", err)
 			}
 			
 			if scanOutput != "" {
-				if err := os.WriteFile(scanOutput, jsonBytes, 0644); err != nil {
+				if err := os.WriteFile(scanOutput, jsonBytes, 0600); err != nil {
 					return NewExitError(ExitCodeRuntimeError, "Failed to write output file: %v", err)
 				}
 			} else {
-				fmt.Println(string(jsonBytes))
+				fmt.Print(string(jsonBytes))
 			}
 		}
 
