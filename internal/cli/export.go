@@ -57,7 +57,7 @@ var exportCmd = &cobra.Command{
 		}
 
 		if exportOutput != "" {
-			if err := os.WriteFile(exportOutput, outBytes, 0644); err != nil {
+			if err := os.WriteFile(exportOutput, outBytes, 0600); err != nil {
 				return NewExitError(ExitCodeRuntimeError, "Failed to write output file: %v", err)
 			}
 		} else {
