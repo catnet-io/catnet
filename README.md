@@ -1,20 +1,20 @@
 # catnet
 
-[![CI](https://github.com/mendsec/catnet/actions/workflows/ci.yml/badge.svg)](https://github.com/mendsec/catnet/actions/workflows/ci.yml)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/mendsec/catnet)](https://golang.org/doc/go1.23)
-[![Release](https://img.shields.io/github/v/release/mendsec/catnet)](https://github.com/mendsec/catnet/releases)
+[![CI](https://github.com/catnet-io/catnet/actions/workflows/ci.yml/badge.svg)](https://github.com/catnet-io/catnet/actions/workflows/ci.yml)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/catnet-io/catnet)](https://golang.org/doc/go1.23)
+[![Release](https://img.shields.io/github/v/release/catnet-io/catnet)](https://github.com/catnet-io/catnet/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Scriptable network scanner CLI. Part of the [CatNet ecosystem](https://github.com/mendsec/catnet-core).
+Scriptable network scanner CLI. Part of the [CatNet ecosystem](https://github.com/catnet-io/engine).
 
 ## Installation
 
 ### From binary (recommended)
-Download the latest release from the [GitHub Releases](https://github.com/mendsec/catnet/releases) page.
+Download the latest release from the [GitHub Releases](https://github.com/catnet-io/catnet/releases) page.
 
 ### From source
 ```bash
-go install github.com/mendsec/catnet/cmd/catnet@latest
+go install github.com/catnet-io/catnet/cmd/catnet@latest
 ```
 
 ## Usage
@@ -84,7 +84,7 @@ Device fields:
 | Repository | Role |
 |---|---|
 | `catnet-core` | Shared scanning engine (no CLI/GUI) |
-| `catnet` | **This repository — Scriptable CLI** |
+| `catnet` | **This repository â€” Scriptable CLI** |
 | `catnet-tui` | Interactive TUI interface |
 | `catnet-scanner` | Desktop GUI application |
 

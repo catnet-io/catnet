@@ -9,8 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mendsec/catnet-core/pkg/exporter"
-	"github.com/mendsec/catnet-core/pkg/results"
+	"github.com/catnet-io/engine/pkg/exporter"
+	"github.com/catnet-io/engine/pkg/results"
 )
 
 var exportCmd = &cobra.Command{

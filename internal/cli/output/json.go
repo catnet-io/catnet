@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/mendsec/catnet-core/pkg/engine"
+	"github.com/catnet-io/engine/pkg/engine"
 )
 
 type JSONOutput struct {

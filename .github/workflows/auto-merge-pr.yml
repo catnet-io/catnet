@@ -1,4 +1,4 @@
-name: Auto Merge PR (develop → main)
+name: Auto Merge PR (develop â†’ main)
 
 on:
   push:
@@ -88,6 +88,6 @@ jobs:
           gh pr create \
             --base main \
             --head develop-signed \
-            --title "chore: merge develop → main" \
+            --title "chore: merge develop â†’ main" \
             --body "Automated PR by github-actions[bot]." \
             || echo "PR already exists, skipping."

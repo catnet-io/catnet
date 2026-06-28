@@ -9,7 +9,7 @@ import (
 	"text/tabwriter"
 	"time"
 
-	"github.com/mendsec/catnet-core/pkg/engine"
+	"github.com/catnet-io/engine/pkg/engine"
 )
 
 type HumanOutput struct {
@@ -83,14 +83,14 @@ func (h *HumanOutput) HandleEvent(event engine.ScanEvent, total int) {
 
 		mac := event.Device.MAC
 		if mac == "" {
-			mac = "—"
+			mac = "â€”"
 		}
 		hostname := event.Device.Hostname
 		if hostname == "" {
-			hostname = "—"
+			hostname = "â€”"
 		}
 
-		ports := "—"
+		ports := "â€”"
 		if len(event.Device.OpenPorts) > 0 {
 			var pStrs []string
 			for _, p := range event.Device.OpenPorts {
