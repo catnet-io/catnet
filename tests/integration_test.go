@@ -102,7 +102,7 @@ func TestScanCancelledByContext(t *testing.T) {
 	// Trigger a background cancel
 	go func() {
 		time.Sleep(1 * time.Second)
-		cmd.Process.Signal(os.Interrupt)
+		_ = cmd.Process.Signal(os.Interrupt)
 	}()
 
 	err := cmd.Wait()
@@ -144,7 +144,9 @@ func TestExportXMLFromJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to read testdata: %v", err)
 	}
-	os.WriteFile(jsonPath, jsonBytes, 0644)
+	if err := os.WriteFile(jsonPath, jsonBytes, 0644); err != nil {
+		t.Fatalf("Failed to write temp file: %v", err)
+	}
 
 	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "xml")
 	out, err := cmd.CombinedOutput()
@@ -171,7 +173,9 @@ func TestExportCSVFromJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to read testdata: %v", err)
 	}
-	os.WriteFile(jsonPath, jsonBytes, 0644)
+	if err := os.WriteFile(jsonPath, jsonBytes, 0644); err != nil {
+		t.Fatalf("Failed to write temp file: %v", err)
+	}
 
 	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "csv")
 	out, err := cmd.CombinedOutput()
@@ -200,7 +204,9 @@ func TestExportInvalidInputFile(t *testing.T) {
 func TestExportInvalidJSON(t *testing.T) {
 	tmpDir := t.TempDir()
 	badPath := filepath.Join(tmpDir, "bad.json")
-	os.WriteFile(badPath, []byte("{invalid json}"), 0644)
+	if err := os.WriteFile(badPath, []byte("{invalid json}"), 0644); err != nil {
+		t.Fatalf("Failed to write temp file: %v", err)
+	}
 
 	cmd := exec.Command(binaryPath, "export", badPath, "--format", "json")
 	err := cmd.Run()
