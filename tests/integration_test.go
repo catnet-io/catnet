@@ -102,7 +102,7 @@ func TestScanCancelledByContext(t *testing.T) {
 	// Trigger a background cancel
 	go func() {
 		time.Sleep(1 * time.Second)
-		cmd.Process.Signal(os.Interrupt)
+		_ = cmd.Process.Signal(os.Interrupt)
 	}()
 
 	err := cmd.Wait()
@@ -144,7 +144,9 @@ func TestExportXMLFromJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to read testdata: %v", err)
 	}
-	os.WriteFile(jsonPath, jsonBytes, 0644)
+	if err := os.WriteFile(jsonPath, jsonBytes, 0644); err != nil {
+		t.Fatalf("Failed to write temp file: %v", err)
+	}
 
 	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "xml")
 	out, err := cmd.CombinedOutput()
@@ -171,7 +173,9 @@ func TestExportCSVFromJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to read testdata: %v", err)
 	}
-	os.WriteFile(jsonPath, jsonBytes, 0644)
+	if err := os.WriteFile(jsonPath, jsonBytes, 0644); err != nil {
+		t.Fatalf("Failed to write temp file: %v", err)
+	}
 
 	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "csv")
 	out, err := cmd.CombinedOutput()
@@ -200,7 +204,9 @@ func TestExportInvalidInputFile(t *testing.T) {
 func TestExportInvalidJSON(t *testing.T) {
 	tmpDir := t.TempDir()
 	badPath := filepath.Join(tmpDir, "bad.json")
-	os.WriteFile(badPath, []byte("{invalid json}"), 0644)
+	if err := os.WriteFile(badPath, []byte("{invalid json}"), 0644); err != nil {
+		t.Fatalf("Failed to write temp file: %v", err)
+	}
 
 	cmd := exec.Command(binaryPath, "export", badPath, "--format", "json")
 	err := cmd.Run()
@@ -217,11 +223,16 @@ func TestExportInvalidJSON(t *testing.T) {
 func TestExportUnsupportedFormat(t *testing.T) {
 	tmpDir := t.TempDir()
 	jsonPath := filepath.Join(tmpDir, "input.json")
-	jsonBytes, _ := os.ReadFile("../testdata/expected_output.json")
-	os.WriteFile(jsonPath, jsonBytes, 0644)
+	jsonBytes, err := os.ReadFile("../testdata/expected_output.json")
+	if err != nil {
+		t.Fatalf("Failed to read testdata: %v", err)
+	}
+	if err := os.WriteFile(jsonPath, jsonBytes, 0644); err != nil {
+		t.Fatalf("Failed to write temp file: %v", err)
+	}
 
 	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "invalid")
-	err := cmd.Run()
+	err = cmd.Run()
 	if err == nil {
 		t.Fatalf("Expected error for unsupported format")
 	}
@@ -235,10 +246,15 @@ func TestExportUnsupportedFormat(t *testing.T) {
 func TestExportSchemaVersionWarning(t *testing.T) {
 	tmpDir := t.TempDir()
 	jsonPath := filepath.Join(tmpDir, "input.json")
-	jsonBytes, _ := os.ReadFile("../testdata/expected_output.json")
+	jsonBytes, err := os.ReadFile("../testdata/expected_output.json")
+	if err != nil {
+		t.Fatalf("Failed to read testdata: %v", err)
+	}
 	badVersion := string(jsonBytes)
 	badVersion = strings.ReplaceAll(badVersion, "\"2.0.0\"", "\"99.0.0\"")
-	os.WriteFile(jsonPath, []byte(badVersion), 0644)
+	if err := os.WriteFile(jsonPath, []byte(badVersion), 0644); err != nil {
+		t.Fatalf("Failed to write temp file: %v", err)
+	}
 
 	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "csv")
 	out, err := cmd.CombinedOutput()

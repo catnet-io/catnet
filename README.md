@@ -92,6 +92,10 @@ Device fields:
 MIT
 
 
+## Development & Security (DevSecOps)
+- **Branching Policy**: `develop` is the main collaboration branch; `main` only accepts signed, automated PRs from `develop` created by `github-actions[bot]`.
+- **CI/CD**: Workflows validate builds, dependencies, and SAST on both `main` and `develop` branches.
+
 ## Part of the CatNet ecosystem
 
 | | Repository | Role |

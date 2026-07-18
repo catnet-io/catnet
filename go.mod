@@ -1,9 +1,9 @@
 module github.com/catnet-io/catnet
 
-go 1.26.4
+go 1.26.5
 
 require (
-	github.com/catnet-io/engine v0.3.0
+	github.com/catnet-io/engine v0.5.1
 	github.com/spf13/cobra v1.10.2
 )
 
