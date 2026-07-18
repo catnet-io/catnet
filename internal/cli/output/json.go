@@ -17,10 +17,6 @@ func NewJSONOutput(quiet bool) *JSONOutput {
 	return &JSONOutput{quiet: quiet, errOut: os.Stderr}
 }
 
-func newJSONOutputWithWriter(errOut io.Writer, quiet bool) *JSONOutput {
-	return &JSONOutput{quiet: quiet, errOut: errOut}
-}
-
 func (j *JSONOutput) HandleEvent(event engine.ScanEvent, total int) {
 	switch event.Type {
 	case engine.EventLifecycleStart:
