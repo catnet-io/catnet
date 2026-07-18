@@ -47,20 +47,20 @@ jobs:
           # Check signatures of all commits in the PR branch
           echo "Checking commits signature up to: $HEAD_SHA"
           
-          # git log lists all commits in the PR branch that are not in main
-          # %G? prints the signature verification status (N for no signature)
           HAS_UNSIGNED=0
-          while read -r sha sig; do
+          # Get the list of all commit SHAs in the PR branch not in main
+          for sha in $(git log origin/main..$HEAD_SHA --pretty=format:"%H"); do
             if [ -z "$sha" ]; then
               continue
             fi
-            if [ "$sig" = "N" ]; then
+            # Check if the commit has a gpgsig header containing GPG/SSH signature
+            if git cat-file -p "$sha" | grep -q "^gpgsig"; then
+              echo "✓ Commit $sha has a signature."
+            else
               echo "::error::Commit $sha is NOT signed. All commits in a PR to main must be signed (GPG or SSH)."
               HAS_UNSIGNED=1
-            else
-              echo "✓ Commit $sha has a signature (status: $sig)"
             fi
-          done < <(git log origin/main..$HEAD_SHA --pretty=format:"%H %G?")
+          done
           
           if [ "$HAS_UNSIGNED" -eq 1 ]; then
             exit 1
