@@ -60,22 +60,22 @@ changelog:
   use: github
   sort: asc
   groups:
-    - title: "âš ï¸ Breaking Changes"
+    - title: "⚠️ Breaking Changes"
       regexp: "^.*!:.*$"
       order: 0
-    - title: "âœ¨ New Features"
+    - title: "✨ New Features"
       regexp: "^.*feat(\\(.+\\))?:.*$"
       order: 1
-    - title: "ðŸ› Bug Fixes"
+    - title: "🐛 Bug Fixes"
       regexp: "^.*fix(\\(.+\\))?:.*$"
       order: 2
-    - title: "ðŸ§ª Tests"
+    - title: "🧪 Tests"
       regexp: "^.*test(\\(.+\\))?:.*$"
       order: 3
-    - title: "ðŸ“š Documentation"
+    - title: "📚 Documentation"
       regexp: "^.*docs(\\(.+\\))?:.*$"
       order: 4
-    - title: "ðŸ”§ Maintenance"
+    - title: "🔧 Maintenance"
       regexp: "^.*(chore|refactor|perf|ci)(\\(.+\\))?:.*$"
       order: 5
     - title: "Other"
@@ -97,9 +97,9 @@ release:
   # The template file lives at .goreleaser/release-template.md
   # and is rendered by GoReleaser before publishing.
   header: |
-    ## catnet {{ .Tag }} â€” {{ .Date | date "January 2006" }}
+    ## catnet {{ .Tag }} — {{ .Date | date "January 2006" }}
 
-    > Released on {{ .Date | date "2006-01-02" }} Â·
+    > Released on {{ .Date | date "2006-01-02" }} ·
     > Engine: [catnet-core](https://github.com/catnet-io/engine)
 
   footer: |
@@ -139,7 +139,7 @@ release:
     | `catnet_Darwin_arm64.tar.gz` | macOS (Apple Silicon) | arm64 |
     | `catnet_Windows_x86_64.zip` | Windows | amd64 |
     | `catnet_Windows_arm64.zip` | Windows | arm64 |
-    | `checksums.txt` | SHA-256 for all archives | â€” |
+    | `checksums.txt` | SHA-256 for all archives | — |
 
     All binaries are statically linked. No runtime dependencies.
 
