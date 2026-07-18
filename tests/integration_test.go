@@ -232,7 +232,7 @@ func TestExportUnsupportedFormat(t *testing.T) {
 	}
 
 	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "invalid")
-	err := cmd.Run()
+	err = cmd.Run()
 	if err == nil {
 		t.Fatalf("Expected error for unsupported format")
 	}
