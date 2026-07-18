@@ -25,13 +25,13 @@ jobs:
           echo "PR HEAD ref: $HEAD_REF"
           echo "PR creator: $PR_USER"
           
-          if [ "$HEAD_REF" != "develop" ]; then
-            echo "::error::PRs to main must only come from the 'develop' branch. Found: '$HEAD_REF'."
+          if [ "$HEAD_REF" != "develop-signed" ]; then
+            echo "::error::PRs to main must only come from the 'develop-signed' branch. Found: '$HEAD_REF'."
             exit 1
           fi
           
           if [ "$PR_USER" != "github-actions[bot]" ] && [ "$PR_USER" != "app/github-actions" ]; then
-            echo "::error::PRs from 'develop' to 'main' must be created by 'github-actions[bot]'. Manual PRs are not allowed. Found: '$PR_USER'."
+            echo "::error::PRs from 'develop-signed' to 'main' must be created by 'github-actions[bot]'. Manual PRs are not allowed. Found: '$PR_USER'."
             exit 1
           fi
           
