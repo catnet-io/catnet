@@ -7,7 +7,7 @@ on:
 
 jobs:
   sync-develop:
-    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop-signed'
     runs-on: ubuntu-latest
     permissions:
       contents: write
