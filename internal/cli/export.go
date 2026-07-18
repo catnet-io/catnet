@@ -71,6 +71,8 @@ var exportCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(exportCmd)
 	exportCmd.Flags().StringP("format", "f", "", "Output format: json, csv, xml (required)")
-	exportCmd.MarkFlagRequired("format")
+	if err := exportCmd.MarkFlagRequired("format"); err != nil {
+		panic(err)
+	}
 	exportCmd.Flags().StringP("output", "o", "", "Write output to file (default: stdout)")
 }
