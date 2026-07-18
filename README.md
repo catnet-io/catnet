@@ -1,7 +1,7 @@
 # catnet
 
 [![CI](https://github.com/catnet-io/catnet/actions/workflows/ci.yml/badge.svg)](https://github.com/catnet-io/catnet/actions/workflows/ci.yml)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/catnet-io/catnet)](https://golang.org/doc/go1.23)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/catnet-io/catnet)](https://golang.org/doc/go1.26)
 [![Release](https://img.shields.io/github/v/release/catnet-io/catnet)](https://github.com/catnet-io/catnet/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -56,7 +56,7 @@ catnet scan 192.168.1.0/24 --format json --quiet
 The JSON output contains the following structure:
 | Field | Type | Description |
 |---|---|---|
-| `schemaVersion` | string | The version of the JSON schema (e.g., "1.0.0") |
+| `schemaVersion` | string | The version of the JSON schema (e.g., "2.0.0") |
 | `startTime` | string | ISO 8601 timestamp when the scan started |
 | `endTime` | string | ISO 8601 timestamp when the scan completed |
 | `total` | int | Total number of IP addresses scanned |
@@ -81,26 +81,17 @@ Device fields:
 | `130` | Interrupted (cancelled by signal, e.g., Ctrl+C) |
 
 ## Ecosystem
-| Repository | Role |
-|---|---|
-| `catnet-core` | Shared scanning engine (no CLI/GUI) |
-| `catnet` | **This repository Ã¢â‚¬â€ Scriptable CLI** |
-| `catnet-tui` | Interactive TUI interface |
-| `catnet-scanner` | Desktop GUI application |
 
-## License
-MIT
-
+| | Repository | Role |
+|---|---|---|
+| ⚙️ | [catnet-io/engine](https://github.com/catnet-io/engine) | Shared Go scanning engine |
+| 💻 | [catnet-io/catnet](https://github.com/catnet-io/catnet) | CLI (This repository) |
+| 🖥️ | [catnet-io/app](https://github.com/catnet-io/app) | Desktop app |
+| 📟 | [catnet-io/tui](https://github.com/catnet-io/tui) | Terminal UI |
 
 ## Development & Security (DevSecOps)
 - **Branching Policy**: `develop` is the main collaboration branch; `main` only accepts signed, automated PRs from `develop` created by `github-actions[bot]`.
 - **CI/CD**: Workflows validate builds, dependencies, and SAST on both `main` and `develop` branches.
 
-## Part of the CatNet ecosystem
-
-| | Repository | Role |
-|---|---|---|
-| ⚙️ | [catnet-io/engine](https://github.com/catnet-io/engine) | Shared Go scanning engine |
-| 💻 | [catnet-io/catnet](https://github.com/catnet-io/catnet) | CLI |
-| 🖥️ | [catnet-io/app](https://github.com/catnet-io/app) | Desktop app |
-| 📟 | [catnet-io/tui](https://github.com/catnet-io/tui) | Terminal UI |
+## License
+MIT
