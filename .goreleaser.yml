@@ -97,9 +97,9 @@ release:
   # The template file lives at .goreleaser/release-template.md
   # and is rendered by GoReleaser before publishing.
   header: |
-    ## catnet {{ .Tag }} — {{ .Date | date "January 2006" }}
+    ## catnet {{ .Tag }} — {{ .Now.Format "January 2006" }}
 
-    > Released on {{ .Date | date "2006-01-02" }} ·
+    > Released on {{ .Now.Format "2006-01-02" }} ·
     > Engine: [catnet-core](https://github.com/catnet-io/engine)
 
   footer: |
