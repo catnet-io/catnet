@@ -25,9 +25,9 @@ builds:
     # Inject version, commit, and build date into the binary.
     ldflags:
       - -s -w
-      - -X github.com/mendsec/catnet/internal/cli.Version={{.Version}}
-      - -X github.com/mendsec/catnet/internal/cli.Commit={{.Commit}}
-      - -X github.com/mendsec/catnet/internal/cli.Date={{.Date}}
+      - -X github.com/catnet-io/catnet/internal/cli.Version={{.Version}}
+      - -X github.com/catnet-io/catnet/internal/cli.Commit={{.Commit}}
+      - -X github.com/catnet-io/catnet/internal/cli.Date={{.Date}}
 
 archives:
   - id: catnet
@@ -60,22 +60,22 @@ changelog:
   use: github
   sort: asc
   groups:
-    - title: "⚠️ Breaking Changes"
+    - title: "âš ï¸ Breaking Changes"
       regexp: "^.*!:.*$"
       order: 0
-    - title: "✨ New Features"
+    - title: "âœ¨ New Features"
       regexp: "^.*feat(\\(.+\\))?:.*$"
       order: 1
-    - title: "🐛 Bug Fixes"
+    - title: "ðŸ› Bug Fixes"
       regexp: "^.*fix(\\(.+\\))?:.*$"
       order: 2
-    - title: "🧪 Tests"
+    - title: "ðŸ§ª Tests"
       regexp: "^.*test(\\(.+\\))?:.*$"
       order: 3
-    - title: "📚 Documentation"
+    - title: "ðŸ“š Documentation"
       regexp: "^.*docs(\\(.+\\))?:.*$"
       order: 4
-    - title: "🔧 Maintenance"
+    - title: "ðŸ”§ Maintenance"
       regexp: "^.*(chore|refactor|perf|ci)(\\(.+\\))?:.*$"
       order: 5
     - title: "Other"
@@ -91,16 +91,16 @@ changelog:
 #   2. A static install block injected automatically
 release:
   github:
-    owner: mendsec
+    owner: catnet-io
     name: catnet
   # Replace the default body with our professional template.
   # The template file lives at .goreleaser/release-template.md
   # and is rendered by GoReleaser before publishing.
   header: |
-    ## catnet {{ .Tag }} — {{ .Date | date "January 2006" }}
+    ## catnet {{ .Tag }} â€” {{ .Date | date "January 2006" }}
 
-    > Released on {{ .Date | date "2006-01-02" }} ·
-    > Engine: [catnet-core](https://github.com/mendsec/catnet-core)
+    > Released on {{ .Date | date "2006-01-02" }} Â·
+    > Engine: [catnet-core](https://github.com/catnet-io/engine)
 
   footer: |
     ---
@@ -109,7 +109,7 @@ release:
 
     **Linux / macOS:**
     ```bash
-    curl -sSL https://github.com/mendsec/catnet/releases/download/{{ .Tag }}/catnet_Linux_x86_64.tar.gz \
+    curl -sSL https://github.com/catnet-io/catnet/releases/download/{{ .Tag }}/catnet_Linux_x86_64.tar.gz \
       | tar xz && sudo mv catnet /usr/local/bin/
     catnet version
     ```
@@ -119,7 +119,7 @@ release:
 
     **go install:**
     ```bash
-    go install github.com/mendsec/catnet/cmd/catnet@{{ .Tag }}
+    go install github.com/catnet-io/catnet/cmd/catnet@{{ .Tag }}
     ```
 
     **Verify checksum:**
@@ -139,15 +139,15 @@ release:
     | `catnet_Darwin_arm64.tar.gz` | macOS (Apple Silicon) | arm64 |
     | `catnet_Windows_x86_64.zip` | Windows | amd64 |
     | `catnet_Windows_arm64.zip` | Windows | arm64 |
-    | `checksums.txt` | SHA-256 for all archives | — |
+    | `checksums.txt` | SHA-256 for all archives | â€” |
 
     All binaries are statically linked. No runtime dependencies.
 
     ---
 
-    **Full diff:** [{{ .PreviousTag }}...{{ .Tag }}](https://github.com/mendsec/catnet/compare/{{ .PreviousTag }}...{{ .Tag }})
+    **Full diff:** [{{ .PreviousTag }}...{{ .Tag }}](https://github.com/catnet-io/catnet/compare/{{ .PreviousTag }}...{{ .Tag }})
 
-    *Found a security issue? Read [SECURITY.md](https://github.com/mendsec/catnet/blob/main/SECURITY.md) before opening a public issue.*
+    *Found a security issue? Read [SECURITY.md](https://github.com/catnet-io/catnet/blob/main/SECURITY.md) before opening a public issue.*
 
   # Do not mark as pre-release automatically.
   prerelease: auto

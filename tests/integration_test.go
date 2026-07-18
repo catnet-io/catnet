@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mendsec/catnet/internal/cli"
+	"github.com/catnet-io/catnet/internal/cli"
 )
 
 var binaryPath string

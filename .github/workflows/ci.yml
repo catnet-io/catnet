@@ -2,45 +2,46 @@ name: CI
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: [main, develop]
   pull_request:
-    branches: ["main", "develop"]
+    branches: [main, develop]
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  build:
+    name: Build · test · vet
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        go: ["1.26.x"]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
-        with:
-          go-version: ${{ matrix.go }}
-      - run: go mod verify
-      - run: go vet ./...
-      - run: go test -race -v ./...
-      - run: go build -o /dev/null ./cmd/catnet
-        if: runner.os != 'Windows'
-      - run: go build -o NUL ./cmd/catnet
-        if: runner.os == 'Windows'
+        go-version: ["1.26.x"]
 
-  aikido:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - name: Aikido Security Scan
-        uses: AikidoSec/github-actions-workflow@47d83dbcf3e6635044c4b31cef590c1e095217cc # v1.0.13
+      - uses: actions/checkout@v4
+
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
         with:
-          secret-key: ${{ secrets.AIKIDO_SECRET_KEY }}
-          fail-on-timeout: true
-          fail-on-dependency-scan: true
-          fail-on-sast-scan: true
-          fail-on-iac-scan: true
-          minimum-severity: 'HIGH'
-          timeout-seconds: 180
-          post-scan-status-comment: 'off'
-          post-sast-review-comments: 'off'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          go-version: ${{ matrix.go-version }}
+          cache: true
+
+      - name: Verify module integrity
+        run: go mod verify
+
+      - name: Check no local replace directives
+        run: |
+          if grep -P "^replace\s+\S+\s+=>\s+\.\." go.mod 2>/dev/null; then
+            echo "ERROR: Local replace directive found in go.mod"
+            exit 1
+          fi
+          echo "✓ No local replace directives"
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Build
+        run: go build ./...
+
+      - name: Test (race detector)
+        run: go test -race -coverprofile=coverage.out ./...

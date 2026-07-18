@@ -7,10 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mendsec/catnet-core/pkg/engine"
-	"github.com/mendsec/catnet-core/pkg/exporter"
-	"github.com/mendsec/catnet-core/pkg/targets"
-	"github.com/mendsec/catnet/internal/cli/output"
+	"github.com/catnet-io/engine/pkg/engine"
+	"github.com/catnet-io/engine/pkg/exporter"
+	"github.com/catnet-io/engine/pkg/targets"
+	"github.com/catnet-io/catnet/internal/cli/output"
 )
 
 var scanCmd = &cobra.Command{

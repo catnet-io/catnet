@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mendsec/catnet-core/pkg/engine"
-	"github.com/mendsec/catnet-core/pkg/results"
+	"github.com/catnet-io/engine/pkg/engine"
+	"github.com/catnet-io/engine/pkg/results"
 )
 
 func TestHumanOutputFormat(t *testing.T) {

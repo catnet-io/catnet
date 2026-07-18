@@ -31,7 +31,7 @@ var versionCmd = &cobra.Command{
 		coreVersion := "unknown"
 		if buildInfo, ok := debug.ReadBuildInfo(); ok {
 			for _, dep := range buildInfo.Deps {
-				if dep.Path == "github.com/mendsec/catnet-core" {
+				if dep.Path == "github.com/catnet-io/engine" {
 					coreVersion = dep.Version
 					break
 				}

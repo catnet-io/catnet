@@ -4,7 +4,7 @@ import (
 	"errors"
 	"os"
 
-	"github.com/mendsec/catnet/internal/cli"
+	"github.com/catnet-io/catnet/internal/cli"
 )
 
 func main() {
