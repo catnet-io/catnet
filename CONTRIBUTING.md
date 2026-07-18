@@ -3,7 +3,7 @@
 First off, thank you for considering contributing to `catnet`! It's people like you that make the CatNet ecosystem a great tool.
 
 ## Rules
-1. **Do not implement scanning logic in this repository.** All network operations must go through `catnet-core`. If you need a new feature that involves scanning, DNS, or parsing, please open an issue or PR in `github.com/mendsec/catnet-core` first.
+1. **Do not implement scanning logic in this repository.** All network operations must go through the shared scanning engine. If you need a new feature that involves scanning, DNS, or parsing, please open an issue or PR in `github.com/catnet-io/engine` first.
 2. The CLI is just a thin wrapper.
 
 ## Local Development
@@ -16,7 +16,7 @@ GOOS=darwin go build ./...
 
 To inject a local development version during build:
 ```bash
-go build -ldflags "-X github.com/mendsec/catnet/internal/cli.Version=dev-local" ./cmd/catnet
+go build -ldflags "-X github.com/catnet-io/catnet/internal/cli.Version=dev-local" ./cmd/catnet
 ```
 
 ## Testing

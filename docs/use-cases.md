@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install catnet
         run: |
-          curl -sSL https://github.com/mendsec/catnet/releases/latest/download/catnet_Linux_x86_64.tar.gz | tar xz
+          curl -sSL https://github.com/catnet-io/catnet/releases/latest/download/catnet_Linux_x86_64.tar.gz | tar xz
           sudo mv catnet /usr/local/bin/
       - name: Scan staging subnet
         run: catnet scan 10.0.1.0/24 --quiet --format json -o scan.json
