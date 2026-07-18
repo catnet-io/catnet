@@ -83,6 +83,7 @@ var scanCmd = &cobra.Command{
 			return NewExitError(ExitCodeInputError, "Unsupported format '%s'. Use 'json' or 'human'.", format)
 		}
 
+		//nolint:staticcheck // engine.StartScan is deprecated but intentionally used per AGENTS.md
 		report, err := engine.StartScan(ctx, allIPs, cfg, eventHandler)
 
 		if err != nil {
