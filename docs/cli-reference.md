@@ -7,7 +7,7 @@ description: Complete flag reference for catnet subcommands — scan, export, ve
 
 # CLI Reference
 
-This page is also available on the [CLI Reference wiki page](https://github.com/mendsec/catnet/wiki/CLI-Reference).
+This page is also available on the [CLI Reference wiki page](https://github.com/catnet-io/catnet/wiki/CLI-Reference).
 
 ## Global Flags
 
@@ -78,7 +78,7 @@ This page is also available on the [CLI Reference wiki page](https://github.com/
 | `--format` | `-f`      | (required) | Output format: `json`, `csv`, `xml`      |
 | `--output` | `-o`      | stdout     | Write to file instead of stdout          |
 
-**Forward compatibility:** Unknown JSON fields in the input file are silently ignored. A WARN is printed to stderr if the `schemaVersion` major digit is not 1.
+**Forward compatibility:** Unknown JSON fields in the input file are silently ignored. A WARN is printed to stderr if the `schemaVersion` major digit is not 1 or 2.
 
 ---
 
@@ -94,8 +94,9 @@ This page is also available on the [CLI Reference wiki page](https://github.com/
 
 **Output:**
 ```
-catnet/v0.2.0 (linux/amd64) go1.26.3
-catnet-core/v0.2.0
+catnet/v0.4.0 (linux/amd64) go1.26.5
+commit: 37dd173  built: 2026-07-18
+catnet-core/v0.5.1
 ```
 
 ---

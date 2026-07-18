@@ -13,6 +13,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-07-18
+
+### Added
+- Scaffolding and setup of GitHub Pages landing page using the Jekyll Cayman theme.
+- GoReleaser template customization with a release footer and statically-linked binary matrix.
+- Linter integration (`golangci-lint`) in GitHub Actions workflows.
+- Integration tests coverage for export commands error handling.
+- Local development helper script `dev-replace.sh` to manage engine module replacement.
+
+### Changed
+- Updated `engine` dependency to `v0.5.1` (bringing async dispatcher, performance improvements, and unified worker paths).
+- Updated minimum Go version requirement to `1.26.5`.
+- Updated repository and ecosystem references to `catnet-io` organization.
+
+### Fixed
+- Fixed Cobra flag check in `export` subcommand to handle error on marking format required.
+- Resolved deprecation warning for `engine.StartScan` by adding inline `nolint:staticcheck` annotations.
+- Handled potential file write and signal errors in integration tests to resolve code review findings.
+- Cleaned up unused JSON output helper function.
+
 ## [0.2.0] - 2026-06-23
 
 ### Changed
@@ -31,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-06-06
 
 ### Added
-- Initial scaffolding of the CLI repository (`github.com/mendsec/catnet`).
+- Initial scaffolding of the CLI repository (`github.com/catnet-io/catnet`).
 - Cobra CLI structure with `root`, `scan`, `export`, and `version` subcommands.
 - Graceful cancellation handling via `context` and `os/signal` (Exit Code 130).
 - Human-readable output formatting with progress bars and terminal color support.
@@ -41,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GoReleaser configuration for automated binary publishing.
 - Integration tests simulating End-to-End behavior via `127.0.0.1` loopback.
 
-[unreleased]: https://github.com/mendsec/catnet/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/mendsec/catnet/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/mendsec/catnet/compare/2721a3346032d02831f4f0594ad6332a57c4f145...v0.1.0
+[unreleased]: https://github.com/catnet-io/catnet/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/catnet-io/catnet/compare/v0.2.0...v0.4.0
+[0.2.0]: https://github.com/catnet-io/catnet/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/catnet-io/catnet/compare/2721a3346032d02831f4f0594ad6332a57c4f145...v0.1.0
