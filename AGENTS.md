@@ -11,7 +11,7 @@ It is a pure consumer of `catnet-io/engine` — it contains zero scanning logic.
 
 **Module path:** `github.com/catnet-io/catnet`  
 **Binary name:** `catnet`  
-**Go version:** 1.26.4  
+**Go version:** 1.26.5  
 **Engine dependency:** `github.com/catnet-io/engine` (see `go.mod` for current version)
 
 ---
