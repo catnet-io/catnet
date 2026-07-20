@@ -52,6 +52,7 @@ When Milestone 5 designates `pkg/scan.Engine` as canonical, this CLI will be upd
    - `2` — runtime error (scan failure)
    - `130` — interrupted (SIGINT/context cancel)
    Do not add new exit codes without updating `docs/cli-reference.md`.
+6. **No dependency downgrades without explicit authorization.** Never downgrade any Go module, GitHub Action, or project dependency unless explicitly requested and approved by the user.
 
 ---
 
