@@ -286,7 +286,7 @@ func TestExportPathWithDotDot(t *testing.T) {
 	}
 	jsonPath := filepath.Join(tmpDir, "input.json")
 	testDataPath := filepath.Clean(filepath.Join("..", "testdata", "expected_output.json"))
-	jsonBytes, err := os.ReadFile(testDataPath)
+	jsonBytes, err := os.ReadFile(testDataPath) // #nosec G304
 	if err != nil {
 		t.Fatalf("Failed to read testdata: %v", err)
 	}
@@ -295,7 +295,7 @@ func TestExportPathWithDotDot(t *testing.T) {
 	}
 
 	relPathWithDotDot := filepath.Join(subDir, "..", "input.json")
-	cmd := exec.Command(binaryPath, "export", relPathWithDotDot, "--format", "json")
+	cmd := exec.Command(binaryPath, "export", relPathWithDotDot, "--format", "json") // #nosec G204
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected success for relative path with '..', got %v: %s", err, out)
@@ -309,7 +309,7 @@ func TestExportValidPathWithoutDotDot(t *testing.T) {
 	tmpDir := t.TempDir()
 	jsonPath := filepath.Join(tmpDir, "valid_input.json")
 	testDataPath := filepath.Clean(filepath.Join("..", "testdata", "expected_output.json"))
-	jsonBytes, err := os.ReadFile(testDataPath)
+	jsonBytes, err := os.ReadFile(testDataPath) // #nosec G304
 	if err != nil {
 		t.Fatalf("Failed to read testdata: %v", err)
 	}
@@ -317,7 +317,7 @@ func TestExportValidPathWithoutDotDot(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "json")
+	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "json") // #nosec G204
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected success for valid path without '..', got %v: %s", err, out)
@@ -335,7 +335,7 @@ func TestExportAbsolutePath(t *testing.T) {
 	}
 
 	testDataPath := filepath.Clean(filepath.Join("..", "testdata", "expected_output.json"))
-	jsonBytes, err := os.ReadFile(testDataPath)
+	jsonBytes, err := os.ReadFile(testDataPath) // #nosec G304
 	if err != nil {
 		t.Fatalf("Failed to read testdata: %v", err)
 	}
@@ -343,7 +343,7 @@ func TestExportAbsolutePath(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", absPath, "--format", "csv")
+	cmd := exec.Command(binaryPath, "export", absPath, "--format", "csv") // #nosec G204
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected success for absolute path, got %v: %s", err, out)
@@ -354,7 +354,7 @@ func TestExportAbsolutePath(t *testing.T) {
 }
 
 func TestExportNonExistentPath(t *testing.T) {
-	cmd := exec.Command(binaryPath, "export", "../non_existent_file_12345.json", "--format", "json")
+	cmd := exec.Command(binaryPath, "export", "../non_existent_file_12345.json", "--format", "json") // #nosec G204
 	out, err := cmd.CombinedOutput()
 	if err == nil {
 		t.Fatalf("Expected error for non-existent path, got success")
