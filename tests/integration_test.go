@@ -290,9 +290,10 @@ func readTestData(t *testing.T) []byte {
 }
 
 func runCatnet(args ...string) ([]byte, error) {
-	// #nosec G204
+	//nolint:gosec
 	// semgrep-ignore: go.lang.security.audit.dangerous-exec-command
-	cmd := exec.Command(binaryPath, args...)
+	cleanBin := filepath.Clean(binaryPath)
+	cmd := exec.Command(cleanBin, args...) // #nosec G204
 	return cmd.CombinedOutput()
 }
 
