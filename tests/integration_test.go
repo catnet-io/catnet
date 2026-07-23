@@ -277,3 +277,6 @@ func TestVersionOutput(t *testing.T) {
 		t.Errorf("Expected version output to contain 'catnet', got: %s", out)
 	}
 }
+
+
+

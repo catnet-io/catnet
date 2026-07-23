@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Updated Content Security Policy (CSP) meta tag in `docs/_includes/head-custom.html` to support Google Analytics scripts, styles, and telemetry.
+- Refactored export path handling in `internal/cli/export.go` to use `filepath.Clean` for path normalization.
+
 ### Changed
 - Bumped GitHub Actions `actions/setup-go` to v7 and `actions/checkout` to v7 across CI workflows.
 
