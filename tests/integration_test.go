@@ -277,3 +277,78 @@ func TestVersionOutput(t *testing.T) {
 		t.Errorf("Expected version output to contain 'catnet', got: %s", out)
 	}
 }
+
+func TestExportPathWithDotDot(t *testing.T) {
+	cmd := exec.Command(binaryPath, "export", "../path/with/../dotdot.json", "--format", "json")
+	out, err := cmd.CombinedOutput()
+	if err == nil {
+		t.Fatalf("Expected error for path containing '..', got success")
+	}
+	if exitErr, ok := err.(*exec.ExitError); ok {
+		if exitErr.ExitCode() != cli.ExitCodeInputError {
+			t.Errorf("Expected ExitCodeInputError (%d), got %v\nOutput: %s", cli.ExitCodeInputError, exitErr.ExitCode(), out)
+		}
+	} else {
+		t.Errorf("Expected ExitError, got %v", err)
+	}
+}
+
+func TestExportValidPathWithoutDotDot(t *testing.T) {
+	tmpDir := t.TempDir()
+	jsonPath := filepath.Join(tmpDir, "valid_input.json")
+	jsonBytes, err := os.ReadFile("../testdata/expected_output.json")
+	if err != nil {
+		t.Fatalf("Failed to read testdata: %v", err)
+	}
+	if err := os.WriteFile(jsonPath, jsonBytes, 0644); err != nil {
+		t.Fatalf("Failed to write temp file: %v", err)
+	}
+
+	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "json")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("Expected success for valid path without '..', got %v: %s", err, out)
+	}
+	if !bytes.Contains(out, []byte("schemaVersion")) {
+		t.Errorf("Expected output to contain 'schemaVersion', got: %s", out)
+	}
+}
+
+func TestExportAbsolutePath(t *testing.T) {
+	tmpDir := t.TempDir()
+	absPath, err := filepath.Abs(filepath.Join(tmpDir, "abs_input.json"))
+	if err != nil {
+		t.Fatalf("Failed to get absolute path: %v", err)
+	}
+
+	jsonBytes, err := os.ReadFile("../testdata/expected_output.json")
+	if err != nil {
+		t.Fatalf("Failed to read testdata: %v", err)
+	}
+	if err := os.WriteFile(absPath, jsonBytes, 0644); err != nil {
+		t.Fatalf("Failed to write temp file: %v", err)
+	}
+
+	cmd := exec.Command(binaryPath, "export", absPath, "--format", "csv")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("Expected success for absolute path, got %v: %s", err, out)
+	}
+	if !bytes.Contains(out, []byte("IP,Hostname,MAC,Status")) {
+		t.Errorf("Expected CSV header in output, got: %s", out)
+	}
+}
+
+func TestExportParentDirectoryRelativePath(t *testing.T) {
+	cmd := exec.Command(binaryPath, "export", "../config.json", "--format", "json")
+	out, err := cmd.CombinedOutput()
+	if err == nil {
+		t.Fatalf("Expected error for relative path containing '..'")
+	}
+	if exitErr, ok := err.(*exec.ExitError); ok {
+		if exitErr.ExitCode() != cli.ExitCodeInputError {
+			t.Errorf("Expected ExitCodeInputError (%d), got %v\nOutput: %s", cli.ExitCodeInputError, exitErr.ExitCode(), out)
+		}
+	}
+}
+
