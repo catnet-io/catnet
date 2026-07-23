@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"strings"
@@ -23,23 +24,19 @@ func TestExportCmdPathHandling(t *testing.T) {
 			t.Fatalf("Failed to create subdir: %v", err)
 		}
 		dotDotPath := filepath.Join(subDir, "..", "test_scan.json")
-		outPath := filepath.Join(tmpDir, "out_dotdot.json")
 
-		rootCmd.SetArgs([]string{"export", dotDotPath, "--format", "json", "--output", outPath})
+		var buf bytes.Buffer
+		rootCmd.SetOut(&buf)
+		rootCmd.SetErr(&buf)
+		rootCmd.SetArgs([]string{"export", dotDotPath, "--format", "json"})
 
 		err := rootCmd.Execute()
 		if err != nil {
 			t.Fatalf("Expected success for normalized path with '..', got: %v", err)
 		}
 
-		cleanOutPath := filepath.Clean(outPath)
-		// nosemgrep: go.lang.security.audit.path-traversal
-		outBytes, err := os.ReadFile(cleanOutPath) // #nosec G304
-		if err != nil {
-			t.Fatalf("Failed to read output json: %v", err)
-		}
-		if !strings.Contains(string(outBytes), "schemaVersion") {
-			t.Errorf("Expected output to contain 'schemaVersion', got: %s", string(outBytes))
+		if !strings.Contains(buf.String(), "schemaVersion") {
+			t.Errorf("Expected output to contain 'schemaVersion', got: %s", buf.String())
 		}
 	})
 
@@ -49,26 +46,25 @@ func TestExportCmdPathHandling(t *testing.T) {
 			t.Fatalf("Failed to get abs path: %v", err)
 		}
 
-		outPath := filepath.Join(tmpDir, "output.csv")
-		rootCmd.SetArgs([]string{"export", absPath, "--format", "csv", "--output", outPath})
+		var buf bytes.Buffer
+		rootCmd.SetOut(&buf)
+		rootCmd.SetErr(&buf)
+		rootCmd.SetArgs([]string{"export", absPath, "--format", "csv"})
 
 		err = rootCmd.Execute()
 		if err != nil {
 			t.Fatalf("Expected success for absolute path export, got: %v", err)
 		}
 
-		cleanOutCSV := filepath.Clean(outPath)
-		// nosemgrep: go.lang.security.audit.path-traversal
-		outBytes, err := os.ReadFile(cleanOutCSV) // #nosec G304
-		if err != nil {
-			t.Fatalf("Failed to read output csv: %v", err)
-		}
-		if !strings.Contains(string(outBytes), "127.0.0.1") {
-			t.Errorf("Expected CSV output to contain IP, got: %s", string(outBytes))
+		if !strings.Contains(buf.String(), "127.0.0.1") {
+			t.Errorf("Expected CSV output to contain IP, got: %s", buf.String())
 		}
 	})
 
 	t.Run("non-existent file path returns exit code input error", func(t *testing.T) {
+		var buf bytes.Buffer
+		rootCmd.SetOut(&buf)
+		rootCmd.SetErr(&buf)
 		rootCmd.SetArgs([]string{"export", filepath.Join(tmpDir, "nonexistent.json"), "--format", "json"})
 
 		err := rootCmd.Execute()

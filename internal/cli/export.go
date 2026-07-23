@@ -62,7 +62,7 @@ var exportCmd = &cobra.Command{
 				return NewExitError(ExitCodeRuntimeError, "Failed to write output file: %v", err)
 			}
 		} else {
-			fmt.Println(string(outBytes))
+			cmd.Println(string(outBytes))
 		}
 
 		return nil
