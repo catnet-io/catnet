@@ -278,6 +278,24 @@ func TestVersionOutput(t *testing.T) {
 	}
 }
 
+func readTestData(t *testing.T) []byte {
+	t.Helper()
+	// #nosec G304
+	// semgrep-ignore: go.lang.security.audit.path-traversal
+	data, err := os.ReadFile("../testdata/expected_output.json")
+	if err != nil {
+		t.Fatalf("Failed to read testdata: %v", err)
+	}
+	return data
+}
+
+func runCatnet(args ...string) ([]byte, error) {
+	// #nosec G204
+	// semgrep-ignore: go.lang.security.audit.dangerous-exec-command
+	cmd := exec.Command(binaryPath, args...)
+	return cmd.CombinedOutput()
+}
+
 func TestExportPathWithDotDot(t *testing.T) {
 	tmpDir := t.TempDir()
 	subDir := filepath.Join(tmpDir, "sub")
@@ -285,18 +303,13 @@ func TestExportPathWithDotDot(t *testing.T) {
 		t.Fatalf("Failed to create subdir: %v", err)
 	}
 	jsonPath := filepath.Join(tmpDir, "input.json")
-	testDataPath := filepath.Clean(filepath.Join("..", "testdata", "expected_output.json"))
-	jsonBytes, err := os.ReadFile(testDataPath) // #nosec G304
-	if err != nil {
-		t.Fatalf("Failed to read testdata: %v", err)
-	}
+	jsonBytes := readTestData(t)
 	if err := os.WriteFile(jsonPath, jsonBytes, 0600); err != nil {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
 	relPathWithDotDot := filepath.Join(subDir, "..", "input.json")
-	cmd := exec.Command(binaryPath, "export", relPathWithDotDot, "--format", "json") // #nosec G204
-	out, err := cmd.CombinedOutput()
+	out, err := runCatnet("export", relPathWithDotDot, "--format", "json")
 	if err != nil {
 		t.Fatalf("Expected success for relative path with '..', got %v: %s", err, out)
 	}
@@ -308,17 +321,12 @@ func TestExportPathWithDotDot(t *testing.T) {
 func TestExportValidPathWithoutDotDot(t *testing.T) {
 	tmpDir := t.TempDir()
 	jsonPath := filepath.Join(tmpDir, "valid_input.json")
-	testDataPath := filepath.Clean(filepath.Join("..", "testdata", "expected_output.json"))
-	jsonBytes, err := os.ReadFile(testDataPath) // #nosec G304
-	if err != nil {
-		t.Fatalf("Failed to read testdata: %v", err)
-	}
+	jsonBytes := readTestData(t)
 	if err := os.WriteFile(jsonPath, jsonBytes, 0600); err != nil {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "json") // #nosec G204
-	out, err := cmd.CombinedOutput()
+	out, err := runCatnet("export", jsonPath, "--format", "json")
 	if err != nil {
 		t.Fatalf("Expected success for valid path without '..', got %v: %s", err, out)
 	}
@@ -334,17 +342,12 @@ func TestExportAbsolutePath(t *testing.T) {
 		t.Fatalf("Failed to get absolute path: %v", err)
 	}
 
-	testDataPath := filepath.Clean(filepath.Join("..", "testdata", "expected_output.json"))
-	jsonBytes, err := os.ReadFile(testDataPath) // #nosec G304
-	if err != nil {
-		t.Fatalf("Failed to read testdata: %v", err)
-	}
+	jsonBytes := readTestData(t)
 	if err := os.WriteFile(absPath, jsonBytes, 0600); err != nil {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", absPath, "--format", "csv") // #nosec G204
-	out, err := cmd.CombinedOutput()
+	out, err := runCatnet("export", absPath, "--format", "csv")
 	if err != nil {
 		t.Fatalf("Expected success for absolute path, got %v: %s", err, out)
 	}
@@ -354,8 +357,7 @@ func TestExportAbsolutePath(t *testing.T) {
 }
 
 func TestExportNonExistentPath(t *testing.T) {
-	cmd := exec.Command(binaryPath, "export", "../non_existent_file_12345.json", "--format", "json") // #nosec G204
-	out, err := cmd.CombinedOutput()
+	out, err := runCatnet("export", "../non_existent_file_12345.json", "--format", "json")
 	if err == nil {
 		t.Fatalf("Expected error for non-existent path, got success")
 	}
