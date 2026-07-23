@@ -20,6 +20,9 @@ var exportCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		exportOutput, _ := cmd.Flags().GetString("output")
 		inputFile := args[0]
+		if strings.Contains(inputFile, "..") {
+			return NewExitError(ExitCodeInputError, "invalid file path")
+		}
 		data, err := os.ReadFile(inputFile)
 		if err != nil {
 			return NewExitError(ExitCodeInputError, "Failed to read input file: %v", err)
