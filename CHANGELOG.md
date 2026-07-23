@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Added Content Security Policy (CSP) meta tag to GitHub Pages documentation site (`docs/_includes/head-custom.html`).
+
 ### Changed
 - Bumped GitHub Actions `actions/setup-go` to v7 and `actions/checkout` to v7 across CI workflows.
 
