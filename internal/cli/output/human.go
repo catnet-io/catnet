@@ -53,7 +53,7 @@ func (h *HumanOutput) HandleEvent(event engine.ScanEvent, total int) {
 		if !h.quiet {
 			fmt.Fprintf(h.errOut, "Scanning %d hosts...\n\n", total)
 			fmt.Fprintln(h.writer, "  IP\tHOSTNAME\tMAC\tSTATUS\tPORTS")
-			h.writer.Flush()
+			_ = h.writer.Flush()
 		}
 	case engine.EventProgress:
 		if !h.quiet {
@@ -105,7 +105,7 @@ func (h *HumanOutput) HandleEvent(event engine.ScanEvent, total int) {
 
 		fmt.Fprintf(h.writer, "  %s\t%s\t%s\t%s%s%s\t%s\n", 
 			event.Device.IP, hostname, mac, colorStart, status, colorEnd, ports)
-		h.writer.Flush()
+		_ = h.writer.Flush()
 
 	case engine.EventLifecycleComplete:
 		if !h.quiet {

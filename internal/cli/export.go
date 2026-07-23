@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -19,7 +20,7 @@ var exportCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		exportOutput, _ := cmd.Flags().GetString("output")
-		inputFile := args[0]
+		inputFile := filepath.Clean(args[0])
 		data, err := os.ReadFile(inputFile)
 		if err != nil {
 			return NewExitError(ExitCodeInputError, "Failed to read input file: %v", err)
