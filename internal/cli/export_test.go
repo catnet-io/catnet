@@ -32,7 +32,9 @@ func TestExportCmdPathHandling(t *testing.T) {
 			t.Fatalf("Expected success for normalized path with '..', got: %v", err)
 		}
 
-		outBytes, err := os.ReadFile(outPath)
+		cleanOutPath := filepath.Clean(outPath)
+		// nosemgrep: go.lang.security.audit.path-traversal
+		outBytes, err := os.ReadFile(cleanOutPath) // #nosec G304
 		if err != nil {
 			t.Fatalf("Failed to read output json: %v", err)
 		}
@@ -55,7 +57,9 @@ func TestExportCmdPathHandling(t *testing.T) {
 			t.Fatalf("Expected success for absolute path export, got: %v", err)
 		}
 
-		outBytes, err := os.ReadFile(outPath)
+		cleanOutCSV := filepath.Clean(outPath)
+		// nosemgrep: go.lang.security.audit.path-traversal
+		outBytes, err := os.ReadFile(cleanOutCSV) // #nosec G304
 		if err != nil {
 			t.Fatalf("Failed to read output csv: %v", err)
 		}
