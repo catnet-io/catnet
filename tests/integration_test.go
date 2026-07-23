@@ -294,7 +294,8 @@ func TestExportPathWithDotDot(t *testing.T) {
 	}
 
 	relPathWithDotDot := filepath.Clean(filepath.Join(subDir, "..", "input.json"))
-	cmd := exec.Command(binaryPath, "export", relPathWithDotDot, "--format", "json")
+	// nosemgrep: go.lang.security.audit.dangerous-exec-command
+	cmd := exec.Command(binaryPath, "export", relPathWithDotDot, "--format", "json") // #nosec G204
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected success for relative path with '..', got %v: %s", err, out)
@@ -315,7 +316,8 @@ func TestExportValidPathWithoutDotDot(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "json")
+	// nosemgrep: go.lang.security.audit.dangerous-exec-command
+	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "json") // #nosec G204
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected success for valid path without '..', got %v: %s", err, out)
@@ -341,7 +343,8 @@ func TestExportAbsolutePath(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", absPath, "--format", "csv")
+	// nosemgrep: go.lang.security.audit.dangerous-exec-command
+	cmd := exec.Command(binaryPath, "export", absPath, "--format", "csv") // #nosec G204
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected success for absolute path, got %v: %s", err, out)
@@ -353,7 +356,8 @@ func TestExportAbsolutePath(t *testing.T) {
 
 func TestExportNonExistentPath(t *testing.T) {
 	nonExistent := filepath.Clean("../non_existent_file_12345.json")
-	cmd := exec.Command(binaryPath, "export", nonExistent, "--format", "json")
+	// nosemgrep: go.lang.security.audit.dangerous-exec-command
+	cmd := exec.Command(binaryPath, "export", nonExistent, "--format", "json") // #nosec G204
 	out, err := cmd.CombinedOutput()
 	if err == nil {
 		t.Fatalf("Expected error for non-existent path, got success")
