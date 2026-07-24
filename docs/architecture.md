@@ -2,14 +2,14 @@
 layout: default
 title: Architecture
 nav_order: 6
-description: How catnet is structured internally and how it relates to catnet-core.
+description: How catnet is structured internally and how it relates to engine.
 ---
 
 # Architecture
 
 ## Design Philosophy
 
-1. **catnet is a consumer, not an engine.** All network logic lives in catnet-core. catnet MUST NOT implement scanning logic directly.
+1. **catnet is a consumer, not an engine.** All network logic lives in engine (`catnet-io/engine`). catnet MUST NOT implement scanning logic directly.
 2. **stdout is for data, stderr is for humans.**
 3. **Exit codes are a contract.**
 
@@ -39,23 +39,23 @@ testdata/
 User → catnet scan args
         │
         ▼
-  targets.ParseRange (catnet-core)
+  targets.ParseRange (engine)
         │
         ▼
-  engine.StartScan (catnet-core)
+  engine.StartScan (engine)
         │
         ▼
   EventCallback → output adapter → stdout/stderr
         │
         ▼
-  exporter.ExportJSON (catnet-core) → file or stdout
+  exporter.ExportJSON (engine) → file or stdout
 ```
 
 ## Dependency Graph
 
 ```
 catnet
-  ├── catnet-core v0.2.0 (zero external deps)
+  ├── catnet-io/engine (zero external deps)
   ├── github.com/spf13/cobra v1.10.2
   └── github.com/spf13/pflag v1.0.9 (indirect)
 ```

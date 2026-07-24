@@ -16,7 +16,12 @@ import (
 var scanCmd = &cobra.Command{
 	Use:   "scan [targets]",
 	Short: "Scan a network range for live hosts",
-	Args:  cobra.MinimumNArgs(1),
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 1 {
+			return NewExitError(ExitCodeInputError, "requires at least 1 target argument (e.g. catnet scan 192.168.1.0/24)")
+		}
+		return nil
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		format, _ := cmd.Flags().GetString("format")
 		scanQuiet, _ := cmd.Flags().GetBool("quiet")

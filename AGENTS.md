@@ -56,6 +56,8 @@ When Milestone 5 designates `pkg/scan.Engine` as canonical, this CLI will be upd
 7. **CI Status Check & Branch Protection Naming Alignment.** Every GitHub Actions workflow added or modified MUST have job/workflow names that EXACTLY match the `required_status_checks` context names configured in GitHub Branch Protection (`gh api /repos/{owner}/{repo}/branches/main/protection/required_status_checks`). Never use mismatched names that cause status checks to hang in "Expected — Waiting for status to be reported".
 8. **GoReleaser Schema Compatibility & Deprecations.** Always run `goreleaser check` when editing `.goreleaser.yml`. Use GoReleaser v2 non-deprecated schema properties (`archives[].ids` instead of `builds`, `homebrew_casks` instead of `brews`).
 9. **Pin Third-Party GitHub Actions to Commit SHA.** All third-party GitHub Actions (outside `actions/*`) MUST be pinned to a full 40-character commit SHA (e.g., `golang/govulncheck-action@032d45514ae346b1db93c04b0c90b841c370344f # v1.1.0`) to satisfy Codacy and SAST security compliance.
+10. **Pull Requests MUST target `develop`.** All PRs created by developers or AI agents MUST target the `develop` branch. Never create or direct PRs directly to `main` (only automated release PRs from `github-actions[bot]` merge `develop` into `main`).
+
 
 ---
 

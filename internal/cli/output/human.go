@@ -83,14 +83,14 @@ func (h *HumanOutput) HandleEvent(event engine.ScanEvent, total int) {
 
 		mac := event.Device.MAC
 		if mac == "" {
-			mac = "â€”"
+			mac = "\u2014"
 		}
 		hostname := event.Device.Hostname
 		if hostname == "" {
-			hostname = "â€”"
+			hostname = "\u2014"
 		}
 
-		ports := "â€”"
+		ports := "\u2014"
 		if len(event.Device.OpenPorts) > 0 {
 			var pStrs []string
 			for _, p := range event.Device.OpenPorts {

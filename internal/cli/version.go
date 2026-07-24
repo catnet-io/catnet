@@ -20,13 +20,14 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print version information",
 	Run: func(cmd *cobra.Command, args []string) {
+		out := cmd.OutOrStdout()
 		if shortVersion {
-			fmt.Println(Version)
+			fmt.Fprintln(out, Version)
 			return
 		}
 
-		fmt.Printf("catnet/%s (%s/%s) %s\n", Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
-		fmt.Printf("commit: %s  built: %s\n", Commit, Date)
+		fmt.Fprintf(out, "catnet/%s (%s/%s) %s\n", Version, runtime.GOOS, runtime.GOARCH, runtime.Version())
+		fmt.Fprintf(out, "commit: %s  built: %s\n", Commit, Date)
 
 		coreVersion := "unknown"
 		if buildInfo, ok := debug.ReadBuildInfo(); ok {
@@ -37,7 +38,7 @@ var versionCmd = &cobra.Command{
 				}
 			}
 		}
-		fmt.Printf("catnet-core/%s\n", coreVersion)
+		fmt.Fprintf(out, "engine/%s\n", coreVersion)
 	},
 }
 

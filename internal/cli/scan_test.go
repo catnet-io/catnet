@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestExportCmdNoArguments(t *testing.T) {
+func TestScanCmdNoArguments(t *testing.T) {
 	t.Cleanup(func() {
 		rootCmd.SetOut(nil)
 		rootCmd.SetErr(nil)
@@ -16,11 +16,11 @@ func TestExportCmdNoArguments(t *testing.T) {
 	var buf bytes.Buffer
 	rootCmd.SetOut(&buf)
 	rootCmd.SetErr(&buf)
-	rootCmd.SetArgs([]string{"export"})
+	rootCmd.SetArgs([]string{"scan"})
 
 	err := rootCmd.Execute()
 	if err == nil {
-		t.Fatalf("Expected error for missing export input argument, got nil")
+		t.Fatalf("Expected error for missing target argument, got nil")
 	}
 
 	if exitErr, ok := err.(*ExitError); ok {
@@ -31,7 +31,7 @@ func TestExportCmdNoArguments(t *testing.T) {
 		t.Errorf("Expected ExitError, got %T: %v", err, err)
 	}
 
-	if !strings.Contains(err.Error(), "requires exactly 1 input file argument") {
-		t.Errorf("Expected error message to contain export guidance, got: %v", err)
+	if !strings.Contains(err.Error(), "requires at least 1 target argument") {
+		t.Errorf("Expected error message to contain target guidance, got: %v", err)
 	}
 }
