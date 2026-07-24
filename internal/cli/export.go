@@ -17,7 +17,12 @@ import (
 var exportCmd = &cobra.Command{
 	Use:   "export [input.json]",
 	Short: "Export a previous scan result to a different format",
-	Args:  cobra.ExactArgs(1),
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) != 1 {
+			return NewExitError(ExitCodeInputError, "requires exactly 1 input file argument (e.g. catnet export results.json -f csv)")
+		}
+		return nil
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		exportOutput, _ := cmd.Flags().GetString("output")
 		inputFile := filepath.Clean(args[0])

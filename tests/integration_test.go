@@ -278,5 +278,26 @@ func TestVersionOutput(t *testing.T) {
 	}
 }
 
+func TestScanNoArguments(t *testing.T) {
+	cmd := exec.Command(binaryPath, "scan")
+	out, err := cmd.CombinedOutput()
+	if err == nil {
+		t.Fatalf("Expected error for missing target argument")
+	}
+
+	if exitErr, ok := err.(*exec.ExitError); ok {
+		if exitErr.ExitCode() != cli.ExitCodeInputError {
+			t.Errorf("Expected ExitCodeInputError (%d), got %v\nOutput: %s", cli.ExitCodeInputError, exitErr.ExitCode(), out)
+		}
+	} else {
+		t.Errorf("Expected ExitError, got %v", err)
+	}
+
+	if !bytes.Contains(out, []byte("requires at least 1 target argument")) {
+		t.Errorf("Expected error message to contain target guidance, got: %s", out)
+	}
+}
+
+
 
 
