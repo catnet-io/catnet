@@ -14,7 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- Improved GitHub Pages landing page (`docs/`): added discreet code copy buttons (`.copy-btn`) with inline visual feedback, replaced confusing source zip/tarball download CTAs with "Latest Release" link, and relocated status badges (Release, CI, License) below the tagline hero banner.
 - Updated project landing page (`docs/index.md`) with official Homebrew (`catnet-io/tap/catnet`) and Scoop (`catnet-io/scoop-bucket`) package manager installation options in the 30-second quick install section.
+
+### Added
+- Added Rule 11 in `AGENTS.md` requiring explicit human user review and approval for any landing page (`docs/`) modifications.
 
 ### Fixed
 - Fixed GitHub Pages navigation link in `docs/_config.yml` to use site baseurl `/catnet/` path instead of root domain path (`/`).
