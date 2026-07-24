@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added Homebrew (`catnet-io/homebrew-tap`) and Scoop (`catnet-io/scoop-bucket`) package manager release distribution configurations in GoReleaser and updated installation documentation.
-- Added hard rules in `AGENTS.md` requiring CI status check alignment with branch protection rules, GoReleaser schema check validation, and commit SHA pinning for third-party GitHub Actions.
+- Added hard rules in `AGENTS.md` requiring CI status check alignment, GoReleaser schema checks, commit SHA pinning, and mandatory `develop` branch targeting for PRs.
 - Added hard rule in `AGENTS.md` prohibiting unauthorized dependency downgrades.
 
 
