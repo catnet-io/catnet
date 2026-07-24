@@ -61,3 +61,26 @@ func TestHumanOutputQuiet(t *testing.T) {
 		t.Errorf("Expected empty errOut in quiet mode, got: %s", errOut.String())
 	}
 }
+
+func TestHumanOutputMissingFields(t *testing.T) {
+	out := &bytes.Buffer{}
+	errOut := &bytes.Buffer{}
+
+	h := newHumanOutputWithWriters(out, errOut, true, false)
+	h.HandleEvent(engine.ScanEvent{
+		Type: engine.EventResult,
+		Device: &results.DeviceInfo{
+			IP:      "192.168.1.2",
+			IsAlive: false,
+		},
+	}, 1)
+
+	outStr := out.String()
+	if !strings.Contains(outStr, "\u2014") {
+		t.Errorf("Expected em-dash for missing fields, got: %s", outStr)
+	}
+	if strings.Contains(outStr, "â") {
+		t.Errorf("Detected Mojibake 'â' in human output: %s", outStr)
+	}
+}
+
