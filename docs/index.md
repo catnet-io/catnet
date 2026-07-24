@@ -16,20 +16,54 @@ description: A fast, scriptable network scanner for the command line. Built in G
 
 ## Install in 30 seconds
 
-**Linux / macOS:**
+**macOS / Linux (Homebrew):**
+```bash
+brew install catnet-io/tap/catnet
+```
+
+**Windows (Scoop):**
+```powershell
+scoop bucket add catnet https://github.com/catnet-io/scoop-bucket
+scoop install catnet
+```
+
+**Linux / macOS (Binary Download):**
 ```bash
 curl -sSL https://github.com/catnet-io/catnet/releases/latest/download/catnet_Linux_x86_64.tar.gz | tar xz
 sudo mv catnet /usr/local/bin/
 catnet version
 ```
 
-**Windows:**
-Download `catnet_Windows_x86_64.zip` from [Releases](https://github.com/catnet-io/catnet/releases), extract, and add to PATH.
-
 **Using Go:**
 ```bash
 go install github.com/catnet-io/catnet/cmd/catnet@latest
 ```
+
+## Quick CLI & Flag Reference
+
+### `catnet scan [targets] [flags]`
+
+| Flag | Shorthand | Default | Description |
+|:---|:---:|:---:|:---|
+| `--ports` | `-p` | `22,80,443,139,445,3389` | Comma-separated TCP ports to probe |
+| `--threads` | `-t` | `64` | Concurrency thread count |
+| `--ping-timeout` | — | `1000` | ICMP ping timeout (in ms) |
+| `--port-timeout` | — | `500` | TCP connect timeout (in ms) |
+| `--timeout` | — | (none) | Scan deadline (e.g. `30s`) |
+| `--no-ports` | — | `false` | ICMP ping sweep only |
+| `--format` | — | `human` | Output format: `human` or `json` |
+| `--output` | `-o` | (none) | Write JSON to file with `0600` permissions |
+| `--quiet` | `-q` | `false` | Suppress progress output to stderr |
+| `--no-color` | — | `false` | Disable ANSI color codes |
+
+### Exit Codes Contract
+
+| Exit Code | Classification | Meaning |
+|:---:|:---|:---|
+| `0` | Success | Scan completed successfully. |
+| `1` | Input Error | Invalid targets, unsupported format, or flag error. |
+| `2` | Runtime Error | Scan failure or network socket error. |
+| `130` | Interrupted | Scan cancelled via Ctrl+C / SIGINT or timeout. |
 
 ## Designed for pipelines
 
@@ -72,14 +106,6 @@ CatNet is a complete network scanning suite designed for terminal users, automat
 | 💻 | [catnet-io/catnet](https://github.com/catnet-io/catnet) | **Scriptable CLI** | This CLI client, optimized for terminal pipelining. |
 | 🖥️ | [catnet-io/app](https://github.com/catnet-io/app) | Desktop GUI | Cross-platform desktop application (Wails + React) with local SQLite history and scan comparison diffing. |
 | 📟 | [catnet-io/tui](https://github.com/catnet-io/tui) | Terminal UI | Keyboard-centric interactive Terminal UI built with Bubble Tea. |
-
-### Explore the Interfaces
-
-#### 📟 Terminal UI (TUI)
-For an interactive, keyboard-driven dashboard inside the console, check out [catnet-io/tui](https://github.com/catnet-io/tui). It connects to the same underlying scanning engine to render real-time progress bars and network status panels.
-
-#### 🖥️ Desktop Application
-For engineers who prefer a graphical dashboard, history persistence, and visual comparison of changes over time, check out the [catnet-io/app](https://github.com/catnet-io/app) desktop wrapper built using Wails and React.
 
 ---
 

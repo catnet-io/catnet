@@ -11,16 +11,8 @@ github:
 navigation:
   - title: Home
     url: /
-  - title: Installation
-    url: /installation/
-  - title: CLI Reference
-    url: /cli-reference/
-  - title: Output Reference
-    url: /output-reference/
-  - title: Use Cases
-    url: /use-cases/
-  - title: Architecture
-    url: /architecture/
+  - title: GitHub Repository
+    url: https://github.com/catnet-io/catnet
   - title: Wiki
     url: https://github.com/catnet-io/catnet/wiki
   - title: catnet-io/engine
