@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- Added missing `govulncheck.yml` workflow (`Govulncheck / govulncheck`) and refactored `pr-rules-enforcer.yml` commit iteration to fulfill required status checks on branch protection.
+- Added missing `govulncheck.yml` workflow (`Govulncheck / govulncheck`) pinned to full length commit SHA (`032d45514ae346b1db93c04b0c90b841c370344f`), and refactored `pr-rules-enforcer.yml` commit iteration to fulfill required status checks on branch protection.
 - Fixed GoReleaser v2 deprecations (`archives.ids` and `homebrew_casks`) in `.goreleaser.yml` and improved installation documentation with OS/arch auto-detection and SHA-256 checksum verification.
 - Updated Content Security Policy (CSP) meta tag in `docs/_includes/head-custom.html` to support Google Analytics scripts, styles, and telemetry.
 - Refactored export path handling in `internal/cli/export.go` to use `filepath.Clean` for path normalization.
