@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated project landing page (`docs/index.md`) with official Homebrew (`catnet-io/tap/catnet`) and Scoop (`catnet-io/scoop-bucket`) package manager installation options in the 30-second quick install section.
 
+### Fixed
+- Fixed GitHub Pages navigation link in `docs/_config.yml` to use site baseurl `/catnet/` path instead of root domain path (`/`).
+- Clarified `--output` flag description and added `catnet export` subcommand flag reference table in `docs/index.md`.
+
 ## [0.5.1] - 2026-07-24
 
 ### Fixed
@@ -84,7 +88,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GoReleaser configuration for automated binary publishing.
 - Integration tests simulating End-to-End behavior via `127.0.0.1` loopback.
 
-[unreleased]: https://github.com/catnet-io/catnet/compare/v0.4.0...HEAD
+[unreleased]: https://github.com/catnet-io/catnet/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/catnet-io/catnet/compare/v0.4.0...v0.5.1
 [0.4.0]: https://github.com/catnet-io/catnet/compare/v0.2.0...v0.4.0
 [0.2.0]: https://github.com/catnet-io/catnet/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/catnet-io/catnet/compare/2721a3346032d02831f4f0594ad6332a57c4f145...v0.1.0

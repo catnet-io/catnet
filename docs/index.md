@@ -52,9 +52,16 @@ go install github.com/catnet-io/catnet/cmd/catnet@latest
 | `--timeout` | — | (none) | Scan deadline (e.g. `30s`) |
 | `--no-ports` | — | `false` | ICMP ping sweep only |
 | `--format` | — | `human` | Output format: `human` or `json` |
-| `--output` | `-o` | (none) | Write JSON to file with `0600` permissions |
+| `--output` | `-o` | (none) | Write scan output file with `0600` permissions (JSON format) |
 | `--quiet` | `-q` | `false` | Suppress progress output to stderr |
 | `--no-color` | — | `false` | Disable ANSI color codes |
+
+### `catnet export [input.json] [flags]`
+
+| Flag | Shorthand | Default | Description |
+|:---|:---:|:---:|:---|
+| `--format` | `-f` | (required) | Target export format: `json`, `csv`, or `xml` |
+| `--output` | `-o` | (none) | Write exported results to file with `0600` permissions |
 
 ### Exit Codes Contract
 

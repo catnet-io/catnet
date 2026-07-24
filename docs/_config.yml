@@ -10,7 +10,7 @@ github:
   repository_url: https://github.com/catnet-io/catnet
 navigation:
   - title: Home
-    url: /
+    url: /catnet/
   - title: GitHub Repository
     url: https://github.com/catnet-io/catnet
   - title: Wiki
