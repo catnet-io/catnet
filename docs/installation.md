@@ -32,20 +32,47 @@ scoop install catnet
 
 ## Method 2 — Pre-built Binary
 
-**Linux / macOS:**
+### Automated Download & Install (Linux / macOS)
+
 ```bash
-curl -sSL https://github.com/catnet-io/catnet/releases/latest/download/catnet_Linux_x86_64.tar.gz | tar xz
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+case "$ARCH" in
+  x86_64) ARCH="x86_64" ;;
+  aarch64|arm64) ARCH="arm64" ;;
+  *) echo "Unsupported architecture: $ARCH" && exit 1 ;;
+esac
+
+TAG=$(curl -sSL https://api.github.com/repos/catnet-io/catnet/releases/latest | grep '"tag_name":' | cut -d'"' -f4)
+ARCHIVE="catnet_${OS}_${ARCH}.tar.gz"
+
+curl -sSLO "https://github.com/catnet-io/catnet/releases/download/${TAG}/${ARCHIVE}"
+curl -sSLO "https://github.com/catnet-io/catnet/releases/download/${TAG}/checksums.txt"
+
+grep "${ARCHIVE}" checksums.txt | sha256sum -c -
+tar -xzf "${ARCHIVE}" catnet
 sudo mv catnet /usr/local/bin/
+rm -f "${ARCHIVE}" checksums.txt
 catnet version
 ```
 
-**Windows:**
-1. Download `catnet_Windows_x86_64.zip` from the [Releases page](https://github.com/catnet-io/catnet/releases).
-2. Extract the archive.
-3. Add the extracted folder to your `PATH`.
-4. Verify: `catnet.exe version`
+### Manual Download
 
-Always verify your download against the `checksums.txt` file published with each release.
+Download the appropriate archive for your platform from [GitHub Releases](https://github.com/catnet-io/catnet/releases):
+
+| Platform | Architecture | Archive |
+|---|---|---|
+| Linux | x86_64 (amd64) | `catnet_Linux_x86_64.tar.gz` |
+| Linux | ARM64 | `catnet_Linux_arm64.tar.gz` |
+| macOS | Intel (x86_64) | `catnet_Darwin_x86_64.tar.gz` |
+| macOS | Apple Silicon (arm64) | `catnet_Darwin_arm64.tar.gz` |
+| Windows | x86_64 / ARM64 | `catnet_Windows_x86_64.zip` / `catnet_Windows_arm64.zip` |
+
+Verify your download against `checksums.txt`:
+
+```bash
+sha256sum -c checksums.txt --ignore-missing
+```
 
 ## Method 3 — `go install`
 

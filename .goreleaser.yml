@@ -31,7 +31,7 @@ builds:
 
 archives:
   - id: catnet
-    builds:
+    ids:
       - catnet
     # Consistent naming: catnet_Linux_x86_64.tar.gz
     name_template: >-
@@ -53,9 +53,7 @@ checksum:
   name_template: "checksums.txt"
   algorithm: sha256
 
-# Use CHANGELOG.md as the source of truth for release notes.
-# GoReleaser extracts the section matching the current tag version.
-# This means the CHANGELOG.md [X.Y.Z] section IS the release body.
+# GoReleaser generates release notes from git commits grouped by Conventional Commits.
 changelog:
   use: github
   sort: asc
@@ -162,7 +160,7 @@ release:
   # Do not mark as pre-release automatically.
   prerelease: auto
 
-brews:
+homebrew_casks:
   - repository:
       owner: catnet-io
       name: homebrew-tap
@@ -171,9 +169,7 @@ brews:
     homepage: "https://github.com/catnet-io/catnet"
     description: "Scriptable network scanner CLI frontend. Part of the CatNet ecosystem"
     license: "MIT"
-    directory: Formula
-    install: |
-      bin.install "catnet"
+    directory: Casks
 
 scoops:
   - repository:
