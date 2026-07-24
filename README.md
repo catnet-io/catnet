@@ -9,13 +9,27 @@ Scriptable network scanner CLI. Part of the [CatNet ecosystem](https://github.co
 
 ## Installation
 
-### From binary (recommended)
-Download the latest release from the [GitHub Releases](https://github.com/catnet-io/catnet/releases) page.
+### Homebrew (macOS / Linux)
+```bash
+brew install catnet-io/tap/catnet
+```
 
-### From source
+### Scoop (Windows)
+```powershell
+scoop bucket add catnet https://github.com/catnet-io/scoop-bucket
+scoop install catnet
+```
+
+### Binary Download
+Download pre-built binaries from [GitHub Releases](https://github.com/catnet-io/catnet/releases).
+
+### From Source
 ```bash
 go install github.com/catnet-io/catnet/cmd/catnet@latest
 ```
+
+*Note: Chocolatey and Winget distribution support is planned for Phase 2.*
+
 
 ## Usage
 

@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Added missing `govulncheck.yml` workflow (`Govulncheck / govulncheck`) pinned to full length commit SHA (`032d45514ae346b1db93c04b0c90b841c370344f`), and refactored `pr-rules-enforcer.yml` commit iteration to fulfill required status checks on branch protection.
+- Fixed GoReleaser v2 deprecations (`archives.ids` and `homebrew_casks`) in `.goreleaser.yml` and improved installation documentation with OS/arch auto-detection and SHA-256 checksum verification.
 - Updated Content Security Policy (CSP) meta tag in `docs/_includes/head-custom.html` to support Google Analytics scripts, styles, and telemetry.
 - Refactored export path handling in `internal/cli/export.go` to use `filepath.Clean` for path normalization.
 
@@ -21,7 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumped GitHub Actions `actions/setup-go` to v7 and `actions/checkout` to v7 across CI workflows.
 
 ### Added
+- Added Homebrew (`catnet-io/homebrew-tap`) and Scoop (`catnet-io/scoop-bucket`) package manager release distribution configurations in GoReleaser and updated installation documentation.
+- Added hard rules in `AGENTS.md` requiring CI status check alignment with branch protection rules, GoReleaser schema check validation, and commit SHA pinning for third-party GitHub Actions.
 - Added hard rule in `AGENTS.md` prohibiting unauthorized dependency downgrades.
+
 
 ## [0.4.0] - 2026-07-18
 

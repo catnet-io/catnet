@@ -53,6 +53,9 @@ When Milestone 5 designates `pkg/scan.Engine` as canonical, this CLI will be upd
    - `130` — interrupted (SIGINT/context cancel)
    Do not add new exit codes without updating `docs/cli-reference.md`.
 6. **No dependency downgrades without explicit authorization.** Never downgrade any Go module, GitHub Action, or project dependency unless explicitly requested and approved by the user.
+7. **CI Status Check & Branch Protection Naming Alignment.** Every GitHub Actions workflow added or modified MUST have job/workflow names that EXACTLY match the `required_status_checks` context names configured in GitHub Branch Protection (`gh api /repos/{owner}/{repo}/branches/main/protection/required_status_checks`). Never use mismatched names that cause status checks to hang in "Expected — Waiting for status to be reported".
+8. **GoReleaser Schema Compatibility & Deprecations.** Always run `goreleaser check` when editing `.goreleaser.yml`. Use GoReleaser v2 non-deprecated schema properties (`archives[].ids` instead of `builds`, `homebrew_casks` instead of `brews`).
+9. **Pin Third-Party GitHub Actions to Commit SHA.** All third-party GitHub Actions (outside `actions/*`) MUST be pinned to a full 40-character commit SHA (e.g., `golang/govulncheck-action@032d45514ae346b1db93c04b0c90b841c370344f # v1.1.0`) to satisfy Codacy and SAST security compliance.
 
 ---
 
@@ -95,4 +98,6 @@ Changelog section is auto-generated from Conventional Commits.
 - `go build ./...`
 - `go test -race ./...`
 - `go vet ./...`
+- `goreleaser check` (when editing `.goreleaser.yml`)
 - GoReleaser snapshot: `goreleaser release --snapshot --clean` (on release PRs)
+- Verify `gh api /repos/catnet-io/catnet/branches/main/protection/required_status_checks` matches workflow job names.
