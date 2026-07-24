@@ -7,6 +7,10 @@ description: A fast, scriptable network scanner for the command line. Built in G
 
 > **catnet** — A fast, scriptable network scanner for the command line. Built in Go. Zero engine dependencies. Made for pipelines.
 
+[![Release](https://img.shields.io/github/v/release/catnet-io/catnet)](https://github.com/catnet-io/catnet/releases)
+[![CI](https://github.com/catnet-io/catnet/actions/workflows/ci.yml/badge.svg)](https://github.com/catnet-io/catnet/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## What catnet does
 
 | 🔍 Discover              | 🔒 Enumerate                | 📤 Export                |
@@ -115,12 +119,6 @@ CatNet is a complete network scanning suite designed for terminal users, automat
 | 📟 | [catnet-io/tui](https://github.com/catnet-io/tui) | Terminal UI | Keyboard-centric interactive Terminal UI built with Bubble Tea. |
 
 ---
-
-## Badges & Status
-
-[![Release](https://img.shields.io/github/v/release/catnet-io/catnet)](https://github.com/catnet-io/catnet/releases)
-[![CI](https://github.com/catnet-io/catnet/actions/workflows/ci.yml/badge.svg)](https://github.com/catnet-io/catnet/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 - [Full documentation on the Wiki](https://github.com/catnet-io/catnet/wiki)
 - [GitHub Repository](https://github.com/catnet-io/catnet)

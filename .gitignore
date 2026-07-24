@@ -20,6 +20,8 @@ go.work
 # Build directories
 /bin/
 /dist/
+_site/
+.jekyll-cache/
 
 # AI agent artifacts
 .aider-desk/

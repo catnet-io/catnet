@@ -5,7 +5,7 @@ description: >-
 baseurl: "/catnet"
 url: "https://catnet-io.github.io"
 theme: jekyll-theme-cayman
-show_downloads: true
+show_downloads: false
 github:
   repository_url: https://github.com/catnet-io/catnet
 navigation:

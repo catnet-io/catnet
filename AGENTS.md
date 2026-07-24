@@ -57,6 +57,8 @@ When Milestone 5 designates `pkg/scan.Engine` as canonical, this CLI will be upd
 8. **GoReleaser Schema Compatibility & Deprecations.** Always run `goreleaser check` when editing `.goreleaser.yml`. Use GoReleaser v2 non-deprecated schema properties (`archives[].ids` instead of `builds`, `homebrew_casks` instead of `brews`).
 9. **Pin Third-Party GitHub Actions to Commit SHA.** All third-party GitHub Actions (outside `actions/*`) MUST be pinned to a full 40-character commit SHA (e.g., `golang/govulncheck-action@032d45514ae346b1db93c04b0c90b841c370344f # v1.1.0`) to satisfy Codacy and SAST security compliance.
 10. **Pull Requests MUST target `develop`.** All PRs created by developers or AI agents MUST target the `develop` branch. Never create or direct PRs directly to `main` (only automated release PRs from `github-actions[bot]` merge `develop` into `main`).
+11. **Landing Page Modifications Approval.** Any modifications to the GitHub Pages landing page (`docs/`) must only be made after explicit review and approval by a real human user.
+
 
 
 ---
