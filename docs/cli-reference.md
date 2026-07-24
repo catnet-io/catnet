@@ -96,7 +96,7 @@ This page is also available on the [CLI Reference wiki page](https://github.com/
 ```
 catnet/v0.4.0 (linux/amd64) go1.26.5
 commit: 37dd173  built: 2026-07-18
-catnet-core/v0.5.1
+engine/v0.5.1
 ```
 
 ---

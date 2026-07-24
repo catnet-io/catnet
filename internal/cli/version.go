@@ -37,7 +37,7 @@ var versionCmd = &cobra.Command{
 				}
 			}
 		}
-		fmt.Printf("catnet-core/%s\n", coreVersion)
+		fmt.Printf("engine/%s\n", coreVersion)
 	},
 }
 

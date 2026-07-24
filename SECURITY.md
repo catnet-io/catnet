@@ -8,4 +8,4 @@ At this time, only the latest major release is supported with security updates.
 
 Please do not report security vulnerabilities through public GitHub issues.
 
-Instead, please report them to the maintainers privately via the same channels used for `catnet-core`. The security policies apply identically across the entire CatNet ecosystem.
+Instead, please report them to the maintainers privately via the same channels used for `catnet-io/engine`. The security policies apply identically across the entire CatNet ecosystem.
