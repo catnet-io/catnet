@@ -31,7 +31,7 @@ builds:
 
 archives:
   - id: catnet
-    ids:
+    builds:
       - catnet
     # Consistent naming: catnet_Linux_x86_64.tar.gz
     name_template: >-
@@ -107,15 +107,25 @@ release:
 
     ### Installation
 
-    **Linux / macOS:**
+    **Homebrew (macOS / Linux):**
+    ```bash
+    brew install catnet-io/tap/catnet
+    ```
+
+    **Scoop (Windows):**
+    ```powershell
+    scoop bucket add catnet https://github.com/catnet-io/scoop-bucket
+    scoop install catnet
+    ```
+
+    **Pre-built Binary (Linux / macOS):**
     ```bash
     curl -sSL https://github.com/catnet-io/catnet/releases/download/{{ .Tag }}/catnet_Linux_x86_64.tar.gz \
       | tar xz && sudo mv catnet /usr/local/bin/
     catnet version
     ```
 
-    **Windows:** Download `catnet_Windows_x86_64.zip` from the assets
-    below, extract, and add to `PATH`.
+    **Windows Binary:** Download `catnet_Windows_x86_64.zip` from the assets below or install via Scoop.
 
     **go install:**
     ```bash
@@ -151,3 +161,27 @@ release:
 
   # Do not mark as pre-release automatically.
   prerelease: auto
+
+brews:
+  - repository:
+      owner: catnet-io
+      name: homebrew-tap
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    name: catnet
+    homepage: "https://github.com/catnet-io/catnet"
+    description: "Scriptable network scanner CLI frontend. Part of the CatNet ecosystem"
+    license: "MIT"
+    directory: Formula
+    install: |
+      bin.install "catnet"
+
+scoops:
+  - repository:
+      owner: catnet-io
+      name: scoop-bucket
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    name: catnet
+    homepage: "https://github.com/catnet-io/catnet"
+    description: "Scriptable network scanner CLI frontend. Part of the CatNet ecosystem"
+    license: "MIT"
+

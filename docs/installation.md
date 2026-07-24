@@ -13,7 +13,24 @@ description: Install catnet — binary download, go install, or build from sourc
 - **Linux, macOS, or Windows** (amd64 or arm64)
 - **Root / administrator privileges** for ICMP scanning on some systems
 
-## Method 1 — Pre-built Binary (Recommended)
+## Method 1 — Package Managers (Recommended)
+
+### Homebrew (macOS / Linux)
+
+```bash
+brew install catnet-io/tap/catnet
+```
+
+### Scoop (Windows)
+
+```powershell
+scoop bucket add catnet https://github.com/catnet-io/scoop-bucket
+scoop install catnet
+```
+
+*Note: Additional Windows package managers (Chocolatey and Winget) are planned for Phase 2.*
+
+## Method 2 — Pre-built Binary
 
 **Linux / macOS:**
 ```bash
@@ -30,7 +47,7 @@ catnet version
 
 Always verify your download against the `checksums.txt` file published with each release.
 
-## Method 2 — `go install`
+## Method 3 — `go install`
 
 ```bash
 go install github.com/catnet-io/catnet/cmd/catnet@latest
@@ -42,7 +59,7 @@ For reproducible builds, pin to a specific tag:
 go install github.com/catnet-io/catnet/cmd/catnet@v0.4.0
 ```
 
-## Method 3 — Build from Source
+## Method 4 — Build from Source
 
 ```bash
 git clone https://github.com/catnet-io/catnet.git
@@ -53,4 +70,5 @@ go build -o catnet ./cmd/catnet
 
 ## Advanced Options
 
-For build-from-source with version injection, Homebrew setup, and shell completion installation, see the [Installation wiki page](https://github.com/catnet-io/catnet/wiki/Installation).
+For build-from-source with version injection and shell completion installation, see the [Installation wiki page](https://github.com/catnet-io/catnet/wiki/Installation).
+
