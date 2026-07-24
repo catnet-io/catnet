@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added copy-to-clipboard button functionality for code snippet blocks on the GitHub Pages landing page (`docs/_includes/head-custom.html`).
+
 ### Changed
 - Updated project landing page (`docs/index.md`) with official Homebrew (`catnet-io/tap/catnet`) and Scoop (`catnet-io/scoop-bucket`) package manager installation options in the 30-second quick install section.
 
