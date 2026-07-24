@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- Fixed Mojibake character encoding (`â€”`) in human output handler ([human.go](file:///home/fabio/Dev/catnet/internal/cli/output/human.go)) for missing fields by using proper UTF-8 em-dash sequence.
+- Fixed Mojibake character encoding (`â€”`) in human output handler (`internal/cli/output/human.go`) for missing fields by using proper UTF-8 em-dash sequence.
 - Fixed missing target validation error message output for `scan` and `export` commands when arguments are omitted.
 - Added missing `govulncheck.yml` workflow (`Govulncheck / govulncheck`) pinned to full length commit SHA (`032d45514ae346b1db93c04b0c90b841c370344f`), and refactored `pr-rules-enforcer.yml` commit iteration to fulfill required status checks on branch protection.
 - Fixed GoReleaser v2 deprecations (`archives.ids` and `homebrew_casks`) in `.goreleaser.yml` and improved installation documentation with OS/arch auto-detection and SHA-256 checksum verification.

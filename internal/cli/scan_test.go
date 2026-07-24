@@ -7,6 +7,12 @@ import (
 )
 
 func TestScanCmdNoArguments(t *testing.T) {
+	t.Cleanup(func() {
+		rootCmd.SetOut(nil)
+		rootCmd.SetErr(nil)
+		rootCmd.SetArgs(nil)
+	})
+
 	var buf bytes.Buffer
 	rootCmd.SetOut(&buf)
 	rootCmd.SetErr(&buf)
