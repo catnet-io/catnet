@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-07-24
+
 ### Fixed
 - Fixed Mojibake character encoding (`â€”`) in human output handler (`internal/cli/output/human.go`) for missing fields by using proper UTF-8 em-dash sequence.
 - Fixed missing target validation error message output for `scan` and `export` commands when arguments are omitted.
