@@ -49,7 +49,7 @@ jobs:
           
           HAS_UNSIGNED=0
           # Get the list of all commit SHAs in the PR branch not in main
-          for sha in $(git log origin/main..$HEAD_SHA --pretty=format:"%H"); do
+          while read -r sha || [ -n "$sha" ]; do
             if [ -z "$sha" ]; then
               continue
             fi
@@ -60,7 +60,7 @@ jobs:
               echo "::error::Commit $sha is NOT signed. All commits in a PR to main must be signed (GPG or SSH)."
               HAS_UNSIGNED=1
             fi
-          done
+          done < <(git log origin/main..$HEAD_SHA --pretty=format:"%H")
           
           if [ "$HAS_UNSIGNED" -eq 1 ]; then
             exit 1
