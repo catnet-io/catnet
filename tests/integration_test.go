@@ -279,7 +279,7 @@ func TestVersionOutput(t *testing.T) {
 }
 
 func TestScanNoArguments(t *testing.T) {
-	cmd := exec.Command(binaryPath, "scan")
+	cmd := exec.Command(binaryPath, "scan") // #nosec G204
 	out, err := cmd.CombinedOutput()
 	if err == nil {
 		t.Fatalf("Expected error for missing target argument")
