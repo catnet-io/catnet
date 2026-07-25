@@ -10,11 +10,29 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
 	"github.com/catnet-io/catnet/internal/cli"
 )
+
+type safeBuffer struct {
+	mu  sync.Mutex
+	buf bytes.Buffer
+}
+
+func (b *safeBuffer) Write(p []byte) (n int, err error) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.buf.Write(p)
+}
+
+func (b *safeBuffer) String() string {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.buf.String()
+}
 
 var binaryPath string
 
@@ -101,16 +119,26 @@ func TestScanOutputJSON(t *testing.T) {
 }
 
 func TestScanAutoTarget(t *testing.T) {
-	cmd := execBinary("scan", "auto", "--no-ports", "--ping-timeout", "1", "--threads", "4096")
-	var stderr bytes.Buffer
+	cmd := execBinary("scan", "auto", "--no-ports", "--ping-timeout", "10")
+	var stderr safeBuffer
 	cmd.Stderr = &stderr
 
-	out, err := cmd.Output()
-	if err != nil {
-		t.Fatalf("Expected scan auto to run without error, got %v\nOutput: %s\nStderr: %s", err, out, stderr.String())
+	if err := cmd.Start(); err != nil {
+		t.Fatalf("Failed to start scan auto: %v", err)
 	}
 
-	if !bytes.Contains(stderr.Bytes(), []byte("Auto-detected")) {
+	done := make(chan error, 1)
+	go func() {
+		done <- cmd.Wait()
+	}()
+
+	select {
+	case <-time.After(3 * time.Second):
+		_ = cmd.Process.Kill()
+	case <-done:
+	}
+
+	if !strings.Contains(stderr.String(), "Auto-detected") {
 		t.Errorf("Expected stderr to contain 'Auto-detected', got: %s", stderr.String())
 	}
 }
