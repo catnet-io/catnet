@@ -52,12 +52,9 @@ func testMain(m *testing.M) int {
 	return m.Run()
 }
 
-// #nosec G204
-// nosec G204
 func execBinary(args ...string) *exec.Cmd {
 	// #nosec G204
-	// nosec G204
-	return exec.Command(binaryPath, args...) // #nosec G204 // nosec G204
+	return exec.Command(binaryPath, args...)
 }
 
 func startTestServer(t *testing.T) int {
