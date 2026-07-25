@@ -25,7 +25,7 @@ func TestScanCmdAutoTargetFeedback(t *testing.T) {
 		rootCmd.SetOut(nil)
 		rootCmd.SetErr(nil)
 		rootCmd.SetArgs(nil)
-		rootCmd.SetContext(nil)
+		rootCmd.SetContext(context.Background())
 	})
 
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
@@ -49,7 +49,7 @@ func TestScanCmdDefaultsToAuto(t *testing.T) {
 		rootCmd.SetOut(nil)
 		rootCmd.SetErr(nil)
 		rootCmd.SetArgs(nil)
-		rootCmd.SetContext(nil)
+		rootCmd.SetContext(context.Background())
 	})
 
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
