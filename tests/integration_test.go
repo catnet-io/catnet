@@ -43,6 +43,7 @@ func testMain(m *testing.M) int {
 	}
 	binaryPath = absPath
 
+	// #nosec G204 -- go build command with test binary path in test setup
 	cmd := exec.Command("go", "build", "-o", binaryPath, "../cmd/catnet")
 	if err := cmd.Run(); err != nil {
 		return 1
@@ -57,6 +58,7 @@ func execBinary(args ...string) *exec.Cmd {
 	if err == nil {
 		cleanPath = absPath
 	}
+	// #nosec G204 -- test binary path is clean and controlled within integration test setup
 	return exec.Command(cleanPath, args...)
 }
 
