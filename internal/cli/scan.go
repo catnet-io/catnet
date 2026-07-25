@@ -31,6 +31,8 @@ var scanCmd = &cobra.Command{
 		var allIPs []string
 		var autoDetectedCount int
 		hasAuto := false
+		seenArgs := make(map[string]bool)
+		seenIPs := make(map[string]bool)
 
 		for _, arg := range args {
 			parts := strings.Split(arg, ",")
@@ -39,6 +41,12 @@ var scanCmd = &cobra.Command{
 				if part == "" {
 					continue
 				}
+				normalizedPart := strings.ToLower(part)
+				if seenArgs[normalizedPart] {
+					continue
+				}
+				seenArgs[normalizedPart] = true
+
 				if strings.EqualFold(part, "auto") {
 					hasAuto = true
 				}
@@ -49,7 +57,12 @@ var scanCmd = &cobra.Command{
 				if strings.EqualFold(part, "auto") {
 					autoDetectedCount += len(ips)
 				}
-				allIPs = append(allIPs, ips...)
+				for _, ip := range ips {
+					if !seenIPs[ip] {
+						seenIPs[ip] = true
+						allIPs = append(allIPs, ip)
+					}
+				}
 			}
 		}
 
@@ -58,7 +71,7 @@ var scanCmd = &cobra.Command{
 		}
 
 		if hasAuto && !scanQuiet {
-			fmt.Fprintf(os.Stderr, "Auto-detected %d target host(s) on local network subnets.\n", autoDetectedCount)
+			cmd.PrintErrf("Auto-detected %d target host(s) on local network subnets.\n", autoDetectedCount)
 		}
 
 		cfg := engine.DefaultConfig()

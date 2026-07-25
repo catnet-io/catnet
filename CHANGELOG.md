@@ -40,7 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumped GitHub Actions `actions/setup-go` to v7 and `actions/checkout` to v7 across CI workflows.
 
 ### Added
-- Support for `'auto'` target subnet detection in `scan` command (#82).
 - Added Homebrew (`catnet-io/homebrew-tap`) and Scoop (`catnet-io/scoop-bucket`) package manager release distribution configurations in GoReleaser and updated installation documentation.
 - Added hard rules in `AGENTS.md` requiring CI status check alignment, GoReleaser schema checks, commit SHA pinning, and mandatory `develop` branch targeting for PRs.
 - Added hard rule in `AGENTS.md` prohibiting unauthorized dependency downgrades.

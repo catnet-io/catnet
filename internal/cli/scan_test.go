@@ -18,12 +18,24 @@ func TestParseRangeAuto(t *testing.T) {
 }
 
 func TestScanCmdAutoTargetFeedback(t *testing.T) {
-	ips, err := targets.ParseRange("auto")
+	t.Cleanup(func() {
+		rootCmd.SetOut(nil)
+		rootCmd.SetErr(nil)
+		rootCmd.SetArgs(nil)
+	})
+
+	var buf bytes.Buffer
+	rootCmd.SetOut(&buf)
+	rootCmd.SetErr(&buf)
+	rootCmd.SetArgs([]string{"scan", "auto", "--no-ports", "--ping-timeout", "10"})
+
+	err := rootCmd.Execute()
 	if err != nil {
-		t.Fatalf("Expected auto target resolution to succeed, got %v", err)
+		t.Fatalf("Expected scan auto to succeed, got %v", err)
 	}
-	if len(ips) == 0 {
-		t.Errorf("Expected at least one IP from auto target resolution")
+
+	if !bytes.Contains(buf.Bytes(), []byte("Auto-detected")) {
+		t.Errorf("Expected CLI stderr to contain 'Auto-detected', got: %s", buf.String())
 	}
 }
 

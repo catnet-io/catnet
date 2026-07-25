@@ -30,11 +30,18 @@ func testMain(m *testing.M) int {
 	}
 	defer os.RemoveAll(tmpDir)
 
+	var targetBin string
 	if runtime.GOOS == "windows" {
-		binaryPath = filepath.Join(tmpDir, "catnet.exe")
+		targetBin = filepath.Join(tmpDir, "catnet.exe")
 	} else {
-		binaryPath = filepath.Join(tmpDir, "catnet")
+		targetBin = filepath.Join(tmpDir, "catnet")
 	}
+
+	absPath, err := filepath.Abs(filepath.Clean(targetBin))
+	if err != nil {
+		return 1
+	}
+	binaryPath = absPath
 
 	cmd := exec.Command("go", "build", "-o", binaryPath, "../cmd/catnet")
 	if err := cmd.Run(); err != nil {
@@ -42,6 +49,15 @@ func testMain(m *testing.M) int {
 	}
 
 	return m.Run()
+}
+
+func execBinary(args ...string) *exec.Cmd {
+	cleanPath := filepath.Clean(binaryPath)
+	absPath, err := filepath.Abs(cleanPath)
+	if err == nil {
+		cleanPath = absPath
+	}
+	return exec.Command(cleanPath, args...)
 }
 
 func startTestServer(t *testing.T) int {
@@ -68,7 +84,7 @@ func TestScanOutputJSON(t *testing.T) {
 	port := startTestServer(t)
 	portStr := fmt.Sprintf("%d", port)
 
-	cmd := exec.Command(binaryPath, "scan", "127.0.0.1", "--format", "json", "--quiet", "--ports", portStr)
+	cmd := execBinary("scan", "127.0.0.1", "--format", "json", "--quiet", "--ports", portStr)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
@@ -88,7 +104,7 @@ func TestScanOutputJSON(t *testing.T) {
 }
 
 func TestScanAutoTarget(t *testing.T) {
-	cmd := exec.Command(binaryPath, "scan", "auto", "--no-ports", "--ping-timeout", "10")
+	cmd := execBinary("scan", "auto", "--no-ports", "--ping-timeout", "10")
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 
@@ -106,7 +122,7 @@ func TestScanCancelledByContext(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Signal testing is unreliable on Windows")
 	}
-	cmd := exec.Command(binaryPath, "scan", "10.0.0.1-10.0.255.255", "--ping-timeout", "1000")
+	cmd := execBinary("scan", "10.0.0.1-10.0.255.255", "--ping-timeout", "1000")
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	
@@ -136,7 +152,7 @@ func TestScanCancelledByContext(t *testing.T) {
 }
 
 func TestScanInvalidTarget(t *testing.T) {
-	cmd := exec.Command(binaryPath, "scan", "not-a-valid-ip")
+	cmd := execBinary("scan", "not-a-valid-ip")
 	err := cmd.Run()
 	if err == nil {
 		t.Fatalf("Expected error for invalid target")
@@ -163,7 +179,7 @@ func TestExportXMLFromJSON(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "xml")
+	cmd := execBinary("export", jsonPath, "--format", "xml")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
@@ -192,7 +208,7 @@ func TestExportCSVFromJSON(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "csv")
+	cmd := execBinary("export", jsonPath, "--format", "csv")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
@@ -204,7 +220,7 @@ func TestExportCSVFromJSON(t *testing.T) {
 }
 
 func TestExportInvalidInputFile(t *testing.T) {
-	cmd := exec.Command(binaryPath, "export", "/nonexistent/path/input.json", "--format", "json")
+	cmd := execBinary("export", "/nonexistent/path/input.json", "--format", "json")
 	err := cmd.Run()
 	if err == nil {
 		t.Fatalf("Expected error for non-existent input file")
@@ -223,7 +239,7 @@ func TestExportInvalidJSON(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", badPath, "--format", "json")
+	cmd := execBinary("export", badPath, "--format", "json")
 	err := cmd.Run()
 	if err == nil {
 		t.Fatalf("Expected error for invalid JSON")
@@ -246,7 +262,7 @@ func TestExportUnsupportedFormat(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "invalid")
+	cmd := execBinary("export", jsonPath, "--format", "invalid")
 	err = cmd.Run()
 	if err == nil {
 		t.Fatalf("Expected error for unsupported format")
@@ -271,7 +287,7 @@ func TestExportSchemaVersionWarning(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "csv")
+	cmd := execBinary("export", jsonPath, "--format", "csv")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
@@ -282,7 +298,7 @@ func TestExportSchemaVersionWarning(t *testing.T) {
 }
 
 func TestVersionOutput(t *testing.T) {
-	cmd := exec.Command(binaryPath, "version")
+	cmd := execBinary("version")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
