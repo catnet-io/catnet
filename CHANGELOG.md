@@ -13,17 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-- Improved GitHub Pages landing page (`docs/`): added discreet code copy buttons (`.copy-btn`) with inline visual feedback, replaced confusing source zip/tarball download CTAs with "Latest Release" link, and relocated status badges (Release, CI, License) below the tagline hero banner.
-- Updated project landing page (`docs/index.md`) with official Homebrew (`catnet-io/tap/catnet`) and Scoop (`catnet-io/scoop-bucket`) package manager installation options in the 30-second quick install section.
+## [0.6.0] - 2026-07-25
 
 ### Added
 - Support for `'auto'` target subnet detection in `scan` command (#82).
 - Added Rule 11 in `AGENTS.md` requiring explicit human user review and approval for any landing page (`docs/`) modifications.
 
+### Changed
+- Improved GitHub Pages landing page (`docs/`): added discreet code copy buttons (`.copy-btn`) with inline visual feedback, replaced confusing source zip/tarball download CTAs with "Latest Release" link, and relocated status badges (Release, CI, License) below the tagline hero banner.
+- Updated project landing page (`docs/index.md`) with official Homebrew (`catnet-io/tap/catnet`) and Scoop (`catnet-io/scoop-bucket`) package manager installation options in the 30-second quick install section.
+
 ### Fixed
 - Fixed GitHub Pages navigation link in `docs/_config.yml` to use site baseurl `/catnet/` path instead of root domain path (`/`).
 - Clarified `--output` flag description and added `catnet export` subcommand flag reference table in `docs/index.md`.
+- Resolved Codacy/staticcheck SA1012 context annotations and race conditions in integration tests.
 
 ## [0.5.1] - 2026-07-24
 
@@ -93,7 +96,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GoReleaser configuration for automated binary publishing.
 - Integration tests simulating End-to-End behavior via `127.0.0.1` loopback.
 
-[unreleased]: https://github.com/catnet-io/catnet/compare/v0.5.1...HEAD
+[unreleased]: https://github.com/catnet-io/catnet/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/catnet-io/catnet/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/catnet-io/catnet/compare/v0.4.0...v0.5.1
 [0.4.0]: https://github.com/catnet-io/catnet/compare/v0.2.0...v0.4.0
 [0.2.0]: https://github.com/catnet-io/catnet/compare/v0.1.0...v0.2.0
