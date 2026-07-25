@@ -54,7 +54,7 @@ func testMain(m *testing.M) int {
 
 func execBinary(args ...string) *exec.Cmd {
 	// #nosec G204
-	return exec.Command(binaryPath, args...)
+	return exec.Command(binaryPath, args...) // nosemgrep
 }
 
 func startTestServer(t *testing.T) int {
