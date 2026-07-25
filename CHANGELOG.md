@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated project landing page (`docs/index.md`) with official Homebrew (`catnet-io/tap/catnet`) and Scoop (`catnet-io/scoop-bucket`) package manager installation options in the 30-second quick install section.
 
 ### Added
+- Support for `'auto'` target subnet detection in `scan` command (#82).
 - Added Rule 11 in `AGENTS.md` requiring explicit human user review and approval for any landing page (`docs/`) modifications.
 
 ### Fixed

@@ -10,11 +10,29 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
 	"github.com/catnet-io/catnet/internal/cli"
 )
+
+type safeBuffer struct {
+	mu  sync.Mutex
+	buf bytes.Buffer
+}
+
+func (b *safeBuffer) Write(p []byte) (n int, err error) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.buf.Write(p)
+}
+
+func (b *safeBuffer) String() string {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.buf.String()
+}
 
 var binaryPath string
 
@@ -30,18 +48,31 @@ func testMain(m *testing.M) int {
 	}
 	defer os.RemoveAll(tmpDir)
 
+	var targetBin string
 	if runtime.GOOS == "windows" {
-		binaryPath = filepath.Join(tmpDir, "catnet.exe")
+		targetBin = filepath.Join(tmpDir, "catnet.exe")
 	} else {
-		binaryPath = filepath.Join(tmpDir, "catnet")
+		targetBin = filepath.Join(tmpDir, "catnet")
 	}
 
+	absPath, err := filepath.Abs(filepath.Clean(targetBin))
+	if err != nil {
+		return 1
+	}
+	binaryPath = absPath
+
+	// #nosec G204 -- go build command with test binary path in test setup
 	cmd := exec.Command("go", "build", "-o", binaryPath, "../cmd/catnet")
 	if err := cmd.Run(); err != nil {
 		return 1
 	}
 
 	return m.Run()
+}
+
+func execBinary(args ...string) *exec.Cmd {
+	// #nosec G204
+	return exec.Command(binaryPath, args...) // nosemgrep
 }
 
 func startTestServer(t *testing.T) int {
@@ -68,7 +99,7 @@ func TestScanOutputJSON(t *testing.T) {
 	port := startTestServer(t)
 	portStr := fmt.Sprintf("%d", port)
 
-	cmd := exec.Command(binaryPath, "scan", "127.0.0.1", "--format", "json", "--quiet", "--ports", portStr)
+	cmd := execBinary("scan", "127.0.0.1", "--format", "json", "--quiet", "--ports", portStr)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
@@ -87,11 +118,36 @@ func TestScanOutputJSON(t *testing.T) {
 	}
 }
 
+func TestScanAutoTarget(t *testing.T) {
+	cmd := execBinary("scan", "auto", "--no-ports", "--ping-timeout", "10")
+	var stderr safeBuffer
+	cmd.Stderr = &stderr
+
+	if err := cmd.Start(); err != nil {
+		t.Fatalf("Failed to start scan auto: %v", err)
+	}
+
+	done := make(chan error, 1)
+	go func() {
+		done <- cmd.Wait()
+	}()
+
+	select {
+	case <-time.After(3 * time.Second):
+		_ = cmd.Process.Kill()
+	case <-done:
+	}
+
+	if !strings.Contains(stderr.String(), "Auto-detected") {
+		t.Errorf("Expected stderr to contain 'Auto-detected', got: %s", stderr.String())
+	}
+}
+
 func TestScanCancelledByContext(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Signal testing is unreliable on Windows")
 	}
-	cmd := exec.Command(binaryPath, "scan", "10.0.0.1-10.0.255.255", "--ping-timeout", "1000")
+	cmd := execBinary("scan", "10.0.0.1-10.0.255.255", "--ping-timeout", "1000")
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	
@@ -121,7 +177,7 @@ func TestScanCancelledByContext(t *testing.T) {
 }
 
 func TestScanInvalidTarget(t *testing.T) {
-	cmd := exec.Command(binaryPath, "scan", "not-a-valid-ip")
+	cmd := execBinary("scan", "not-a-valid-ip")
 	err := cmd.Run()
 	if err == nil {
 		t.Fatalf("Expected error for invalid target")
@@ -148,7 +204,7 @@ func TestExportXMLFromJSON(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "xml")
+	cmd := execBinary("export", jsonPath, "--format", "xml")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
@@ -177,7 +233,7 @@ func TestExportCSVFromJSON(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "csv")
+	cmd := execBinary("export", jsonPath, "--format", "csv")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
@@ -189,7 +245,7 @@ func TestExportCSVFromJSON(t *testing.T) {
 }
 
 func TestExportInvalidInputFile(t *testing.T) {
-	cmd := exec.Command(binaryPath, "export", "/nonexistent/path/input.json", "--format", "json")
+	cmd := execBinary("export", "/nonexistent/path/input.json", "--format", "json")
 	err := cmd.Run()
 	if err == nil {
 		t.Fatalf("Expected error for non-existent input file")
@@ -208,7 +264,7 @@ func TestExportInvalidJSON(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", badPath, "--format", "json")
+	cmd := execBinary("export", badPath, "--format", "json")
 	err := cmd.Run()
 	if err == nil {
 		t.Fatalf("Expected error for invalid JSON")
@@ -231,7 +287,7 @@ func TestExportUnsupportedFormat(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "invalid")
+	cmd := execBinary("export", jsonPath, "--format", "invalid")
 	err = cmd.Run()
 	if err == nil {
 		t.Fatalf("Expected error for unsupported format")
@@ -256,7 +312,7 @@ func TestExportSchemaVersionWarning(t *testing.T) {
 		t.Fatalf("Failed to write temp file: %v", err)
 	}
 
-	cmd := exec.Command(binaryPath, "export", jsonPath, "--format", "csv")
+	cmd := execBinary("export", jsonPath, "--format", "csv")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
@@ -267,7 +323,7 @@ func TestExportSchemaVersionWarning(t *testing.T) {
 }
 
 func TestVersionOutput(t *testing.T) {
-	cmd := exec.Command(binaryPath, "version")
+	cmd := execBinary("version")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("Expected nil error, got %v: %s", err, out)
