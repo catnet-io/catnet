@@ -2,11 +2,32 @@ package cli
 
 import (
 	"bytes"
-	"strings"
 	"testing"
+
+	"github.com/catnet-io/engine/pkg/targets"
 )
 
-func TestScanCmdNoArguments(t *testing.T) {
+func TestParseRangeAuto(t *testing.T) {
+	ips, err := targets.ParseRange("auto")
+	if err != nil {
+		t.Fatalf("ParseRange('auto') returned unexpected error: %v", err)
+	}
+	if len(ips) == 0 {
+		t.Errorf("Expected ParseRange('auto') to return at least one IP address")
+	}
+}
+
+func TestScanCmdAutoTargetFeedback(t *testing.T) {
+	ips, err := targets.ParseRange("auto")
+	if err != nil {
+		t.Fatalf("Expected auto target resolution to succeed, got %v", err)
+	}
+	if len(ips) == 0 {
+		t.Errorf("Expected at least one IP from auto target resolution")
+	}
+}
+
+func TestScanCmdDefaultsToAuto(t *testing.T) {
 	t.Cleanup(func() {
 		rootCmd.SetOut(nil)
 		rootCmd.SetErr(nil)
@@ -16,22 +37,10 @@ func TestScanCmdNoArguments(t *testing.T) {
 	var buf bytes.Buffer
 	rootCmd.SetOut(&buf)
 	rootCmd.SetErr(&buf)
-	rootCmd.SetArgs([]string{"scan"})
+	rootCmd.SetArgs([]string{"scan", "--no-ports", "--ping-timeout", "10"})
 
 	err := rootCmd.Execute()
-	if err == nil {
-		t.Fatalf("Expected error for missing target argument, got nil")
-	}
-
-	if exitErr, ok := err.(*ExitError); ok {
-		if exitErr.Code != ExitCodeInputError {
-			t.Errorf("Expected ExitCodeInputError (%d), got %d", ExitCodeInputError, exitErr.Code)
-		}
-	} else {
-		t.Errorf("Expected ExitError, got %T: %v", err, err)
-	}
-
-	if !strings.Contains(err.Error(), "requires at least 1 target argument") {
-		t.Errorf("Expected error message to contain target guidance, got: %v", err)
+	if err != nil {
+		t.Fatalf("Expected catnet scan without arguments to default to auto and succeed, got %v", err)
 	}
 }

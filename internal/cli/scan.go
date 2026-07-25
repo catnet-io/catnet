@@ -16,12 +16,7 @@ import (
 var scanCmd = &cobra.Command{
 	Use:   "scan [targets]",
 	Short: "Scan a network range for live hosts",
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return NewExitError(ExitCodeInputError, "requires at least 1 target argument (e.g. catnet scan 192.168.1.0/24)")
-		}
-		return nil
-	},
+	Args:  cobra.ArbitraryArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		format, _ := cmd.Flags().GetString("format")
 		scanQuiet, _ := cmd.Flags().GetBool("quiet")
@@ -29,7 +24,14 @@ var scanCmd = &cobra.Command{
 		scanOutput, _ := cmd.Flags().GetString("output")
 		scanNoPorts, _ := cmd.Flags().GetBool("no-ports")
 
+		if len(args) == 0 {
+			args = []string{"auto"}
+		}
+
 		var allIPs []string
+		var autoDetectedCount int
+		hasAuto := false
+
 		for _, arg := range args {
 			parts := strings.Split(arg, ",")
 			for _, part := range parts {
@@ -37,9 +39,15 @@ var scanCmd = &cobra.Command{
 				if part == "" {
 					continue
 				}
+				if strings.EqualFold(part, "auto") {
+					hasAuto = true
+				}
 				ips, err := targets.ParseRange(part)
 				if err != nil {
 					return NewExitError(ExitCodeInputError, "Invalid target '%s': %v", part, err)
+				}
+				if strings.EqualFold(part, "auto") {
+					autoDetectedCount += len(ips)
 				}
 				allIPs = append(allIPs, ips...)
 			}
@@ -47,6 +55,10 @@ var scanCmd = &cobra.Command{
 
 		if len(allIPs) == 0 {
 			return NewExitError(ExitCodeInputError, "No valid targets provided.")
+		}
+
+		if hasAuto && !scanQuiet {
+			fmt.Fprintf(os.Stderr, "Auto-detected %d target host(s) on local network subnets.\n", autoDetectedCount)
 		}
 
 		cfg := engine.DefaultConfig()

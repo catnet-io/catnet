@@ -87,6 +87,21 @@ func TestScanOutputJSON(t *testing.T) {
 	}
 }
 
+func TestScanAutoTarget(t *testing.T) {
+	cmd := exec.Command(binaryPath, "scan", "auto", "--no-ports", "--ping-timeout", "10")
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+
+	out, err := cmd.Output()
+	if err != nil {
+		t.Fatalf("Expected scan auto to run without error, got %v\nOutput: %s\nStderr: %s", err, out, stderr.String())
+	}
+
+	if !bytes.Contains(stderr.Bytes(), []byte("Auto-detected")) {
+		t.Errorf("Expected stderr to contain 'Auto-detected', got: %s", stderr.String())
+	}
+}
+
 func TestScanCancelledByContext(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("Signal testing is unreliable on Windows")
