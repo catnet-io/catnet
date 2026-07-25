@@ -104,7 +104,7 @@ func TestScanOutputJSON(t *testing.T) {
 }
 
 func TestScanAutoTarget(t *testing.T) {
-	cmd := execBinary("scan", "auto", "--no-ports", "--ping-timeout", "10")
+	cmd := execBinary("scan", "auto", "--no-ports", "--ping-timeout", "10", "--threads", "2048")
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 

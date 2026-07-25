@@ -27,7 +27,7 @@ func TestScanCmdAutoTargetFeedback(t *testing.T) {
 	var buf bytes.Buffer
 	rootCmd.SetOut(&buf)
 	rootCmd.SetErr(&buf)
-	rootCmd.SetArgs([]string{"scan", "auto", "--no-ports", "--ping-timeout", "10"})
+	rootCmd.SetArgs([]string{"scan", "auto", "--no-ports", "--ping-timeout", "10", "--threads", "2048"})
 
 	err := rootCmd.Execute()
 	if err != nil {
@@ -49,7 +49,7 @@ func TestScanCmdDefaultsToAuto(t *testing.T) {
 	var buf bytes.Buffer
 	rootCmd.SetOut(&buf)
 	rootCmd.SetErr(&buf)
-	rootCmd.SetArgs([]string{"scan", "--no-ports", "--ping-timeout", "10"})
+	rootCmd.SetArgs([]string{"scan", "--no-ports", "--ping-timeout", "10", "--threads", "2048"})
 
 	err := rootCmd.Execute()
 	if err != nil {
