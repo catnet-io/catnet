@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
-  function createCopyIcon() {
+  function createBaseSvg() {
     const svg = document.createElementNS(SVG_NS, 'svg');
     svg.setAttribute('width', '15');
     svg.setAttribute('height', '15');
@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
     svg.setAttribute('stroke-width', '2');
     svg.setAttribute('stroke-linecap', 'round');
     svg.setAttribute('stroke-linejoin', 'round');
+    return svg;
+  }
+
+  function createCopyIcon() {
+    const svg = createBaseSvg();
 
     const path = document.createElementNS(SVG_NS, 'path');
     path.setAttribute('d', 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2');
@@ -31,15 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function createCheckIcon() {
-    const svg = document.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('width', '15');
-    svg.setAttribute('height', '15');
-    svg.setAttribute('viewBox', '0 0 24 24');
-    svg.setAttribute('fill', 'none');
-    svg.setAttribute('stroke', 'currentColor');
-    svg.setAttribute('stroke-width', '2');
-    svg.setAttribute('stroke-linecap', 'round');
-    svg.setAttribute('stroke-linejoin', 'round');
+    const svg = createBaseSvg();
 
     const polyline = document.createElementNS(SVG_NS, 'polyline');
     polyline.setAttribute('points', '20 6 9 17 4 12');
