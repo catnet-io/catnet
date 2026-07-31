@@ -48,11 +48,37 @@ document.addEventListener('DOMContentLoaded', function () {
     return svg;
   }
 
+  function fallbackCopyToClipboard(text) {
+    return new Promise(function (resolve, reject) {
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        if (successful) {
+          resolve();
+        } else {
+          reject(new Error('Fallback copy failed'));
+        }
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
   function copyToClipboard(text) {
     if (navigator && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-      return navigator.clipboard.writeText(text);
+      return navigator.clipboard.writeText(text).catch(function () {
+        return fallbackCopyToClipboard(text);
+      });
     }
-    return Promise.reject(new Error('Clipboard API unavailable'));
+    return fallbackCopyToClipboard(text);
   }
 
   const blocks = document.querySelectorAll('div.highlighter-rouge');
@@ -80,23 +106,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
       copyToClipboard(text)
         .then(function () {
+          if (btn._resetTimer) {
+            clearTimeout(btn._resetTimer);
+          }
           btn.replaceChildren(createCheckIcon());
           btn.setAttribute('title', 'Copied!');
           btn.setAttribute('aria-label', 'Copied!');
           btn.classList.add('copied');
-          setTimeout(function () {
+          btn._resetTimer = setTimeout(function () {
             btn.replaceChildren(createCopyIcon());
             btn.setAttribute('title', 'Copy');
             btn.setAttribute('aria-label', 'Copy code to clipboard');
             btn.classList.remove('copied');
+            btn._resetTimer = null;
           }, 2000);
         })
         .catch(function () {
-          // ignore copy failures silently without console error logging
+          // ignore copy failures silently
         });
     });
 
     block.appendChild(btn);
   });
 });
+
 
