@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed CSP inline JavaScript security vulnerability on GitHub Pages landing page (`docs/`) by extracting inline scripts into `docs/assets/js/main.js` and removing `'unsafe-inline'` from the `script-src` directive in `docs/_includes/head-custom.html`.
+- Refactored `docs/assets/js/main.js` to eliminate `innerHTML`, `execCommand`, `var` declarations, and `console.error` to resolve Codacy static code analysis security and quality violations.
 
 ## [0.6.0] - 2026-07-25
 

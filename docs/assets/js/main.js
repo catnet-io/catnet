@@ -1,72 +1,102 @@
+'use strict';
+
 document.addEventListener('DOMContentLoaded', function () {
-  var iconCopy = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>';
-  var iconCheck = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+
+  function createCopyIcon() {
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('width', '15');
+    svg.setAttribute('height', '15');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2');
+
+    const rect = document.createElementNS(SVG_NS, 'rect');
+    rect.setAttribute('x', '8');
+    rect.setAttribute('y', '2');
+    rect.setAttribute('width', '8');
+    rect.setAttribute('height', '4');
+    rect.setAttribute('rx', '1');
+    rect.setAttribute('ry', '1');
+
+    svg.appendChild(path);
+    svg.appendChild(rect);
+    return svg;
+  }
+
+  function createCheckIcon() {
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('width', '15');
+    svg.setAttribute('height', '15');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+
+    const polyline = document.createElementNS(SVG_NS, 'polyline');
+    polyline.setAttribute('points', '20 6 9 17 4 12');
+
+    svg.appendChild(polyline);
+    return svg;
+  }
 
   function copyToClipboard(text) {
     if (navigator && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
       return navigator.clipboard.writeText(text);
     }
-    return new Promise(function (resolve, reject) {
-      try {
-        var textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-9999px';
-        textArea.style.top = '-9999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        var successful = document.execCommand('copy');
-        document.body.removeChild(textArea);
-        if (successful) {
-          resolve();
-        } else {
-          reject(new Error('execCommand copy failed'));
-        }
-      } catch (err) {
-        reject(err);
-      }
-    });
+    return Promise.reject(new Error('Clipboard API unavailable'));
   }
 
-  var blocks = document.querySelectorAll('div.highlighter-rouge');
+  const blocks = document.querySelectorAll('div.highlighter-rouge');
   blocks.forEach(function (block) {
     if (block.querySelector('.copy-btn')) return;
-    var btn = document.createElement('button');
+
+    const btn = document.createElement('button');
     btn.className = 'copy-btn';
     btn.type = 'button';
     btn.setAttribute('aria-label', 'Copy code to clipboard');
     btn.setAttribute('title', 'Copy');
-    btn.innerHTML = iconCopy;
+    btn.appendChild(createCopyIcon());
 
     btn.addEventListener('click', function () {
-      var codeEl = block.querySelector('code') || block.querySelector('pre');
-      var text = '';
+      const codeEl = block.querySelector('code') || block.querySelector('pre');
+      let text = '';
       if (codeEl) {
-        text = codeEl.textContent;
+        text = codeEl.textContent || '';
       } else {
-        var clone = block.cloneNode(true);
-        var existingBtn = clone.querySelector('.copy-btn');
+        const clone = block.cloneNode(true);
+        const existingBtn = clone.querySelector('.copy-btn');
         if (existingBtn) existingBtn.remove();
-        text = clone.textContent;
+        text = clone.textContent || '';
       }
 
-      copyToClipboard(text).then(function () {
-        btn.innerHTML = iconCheck;
-        btn.setAttribute('title', 'Copied!');
-        btn.setAttribute('aria-label', 'Copied!');
-        btn.classList.add('copied');
-        setTimeout(function () {
-          btn.innerHTML = iconCopy;
-          btn.setAttribute('title', 'Copy');
-          btn.setAttribute('aria-label', 'Copy code to clipboard');
-          btn.classList.remove('copied');
-        }, 2000);
-      }).catch(function (err) {
-        console.error('Failed to copy code: ', err);
-      });
+      copyToClipboard(text)
+        .then(function () {
+          btn.replaceChildren(createCheckIcon());
+          btn.setAttribute('title', 'Copied!');
+          btn.setAttribute('aria-label', 'Copied!');
+          btn.classList.add('copied');
+          setTimeout(function () {
+            btn.replaceChildren(createCopyIcon());
+            btn.setAttribute('title', 'Copy');
+            btn.setAttribute('aria-label', 'Copy code to clipboard');
+            btn.classList.remove('copied');
+          }, 2000);
+        })
+        .catch(function () {
+          // ignore copy failures silently without console error logging
+        });
     });
 
     block.appendChild(btn);
   });
 });
+
