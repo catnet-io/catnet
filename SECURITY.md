@@ -1,11 +1,38 @@
 # Security Policy
 
-## Supported Versions
+## Scope
 
-At this time, only the latest major release is supported with security updates.
+This policy covers every repository in the [CatNet](https://github.com/catnet-io) ecosystem:
 
-## Reporting a Vulnerability
+| Repository | Role |
+| :--- | :--- |
+| [`engine`](https://github.com/catnet-io/engine) | Shared Go scanning engine |
+| [`catnet`](https://github.com/catnet-io/catnet) | CLI |
+| [`app`](https://github.com/catnet-io/app) | Desktop GUI (Wails + React) |
+| [`tui`](https://github.com/catnet-io/tui) | Terminal UI (Bubble Tea) |
 
-Please do not report security vulnerabilities through public GitHub issues.
+## Supported versions
 
-Instead, please report them to the maintainers privately via the same channels used for `catnet-io/engine`. The security policies apply identically across the entire CatNet ecosystem.
+Only the latest release of each repository receives security updates.
+
+## Reporting a vulnerability
+
+**Do not open a public issue for a security vulnerability.**
+
+Report it privately through either channel:
+
+- **GitHub Security Advisories** — [open a private report](https://github.com/catnet-io/catnet/security/advisories/new) *(preferred)*
+- **Email** — <fabiomendes@mailfence.com>
+
+Please include the affected repository and version, reproduction steps, and the impact you
+observed. Expect an acknowledgement within 5 business days.
+
+## Disclosure
+
+Fixes are developed privately and released before public disclosure. Reporters are credited in
+the advisory unless they ask otherwise.
+
+## Responsible use
+
+CatNet is network scanning software. Use it only against hosts and networks for which you have
+explicit authorization. Unauthorized scanning may be illegal in your jurisdiction.
